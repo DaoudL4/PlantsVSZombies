@@ -16,6 +16,8 @@ class Shop (var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
     var trad = 0f
     val tr = RectF(tx-trad,ty-trad,tx+trad,ty+trad)
 
+    lateinit var plante_touchee : String
+
     fun onTouch(e : MotionEvent){
 
     }
