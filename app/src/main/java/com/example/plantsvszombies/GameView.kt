@@ -24,21 +24,27 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var distanceCaseY = 0f
 
     var credit = Credit(0f,0f,0f)
-    var shop = Shop(0f, 0f, 0f, 0f)
+    var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
 
-    var tournesol: Tournesol
+    lateinit var plantes : ArrayList<Plante>
 
     init {
         backgroundPaint.color = Color.WHITE
-        cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f)} }
-        tournesol = Tournesol(cases[2][4], 0f)
+        cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean{
-        if(e?.action == MotionEvent.ACTION_DOWN){
+        if(e.action == MotionEvent.ACTION_DOWN){
             soleil.onTouch(e)
             shop.onTouch(e)
+            if(shop.modeAchat) {
+                for (i in 0..ncaseY - 1) {
+                    for (j in 0..ncaseX - 1) {
+                        cases[i][j].onTouch(e, shop)
+                    }
+                }
+            }
         }
         return true
     }
@@ -55,12 +61,26 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                     cases[i][j].draw(canvas)
                 }
             }
+
+            for (p in plantes){
+                p.draw(canvas)
+            }
             shop.draw(canvas)
             credit.draw(canvas)
             soleil.draw(canvas)
-            tournesol.draw(canvas)
 
             holder.unlockCanvasAndPost(canvas)
+        }
+    }
+
+    fun achatPlante(plante : String, case: Case) {
+        when(plante){
+            "Tournesol" -> {
+                plantes.add(Tournesol(case, 100f))
+                credit.updateCredit(resources.getInteger(R.integer.prix_tournesol))
+                shop.modeAchat = false
+            }
+
         }
     }
 
@@ -101,8 +121,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         soleil.rayon = largeurCase/2
         soleil.set()
 
-        tournesol.rayon = largeurCase/2
-        tournesol.set()
+
     }
 
     override fun run() {
@@ -136,4 +155,5 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     override fun surfaceDestroyed(p0: SurfaceHolder) {
         TODO("Not yet implemented")
     }
+
 }

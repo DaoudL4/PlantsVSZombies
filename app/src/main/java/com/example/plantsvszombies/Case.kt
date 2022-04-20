@@ -4,8 +4,9 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.view.MotionEvent
 
-class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur : Float) {
+class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur : Float, var view : GameView) {
     var paint = Paint()
     var occupe = false
     var pair = 0
@@ -17,6 +18,16 @@ class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur
         else paint.color = Color.argb(255,30,130,76)
 
         canvas.drawRect(case, paint)
+    }
+
+    fun onTouch(e : MotionEvent, shop: Shop){
+        val xtouch = e.rawX - 100
+        val ytouch = e.rawY - 100
+
+        if(case.contains(xtouch, ytouch) && !occupe){
+            view.achatPlante(shop.plante_touchee, this)
+            occupe = true
+        }
     }
 
     fun setcase(){

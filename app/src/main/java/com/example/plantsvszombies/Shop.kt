@@ -1,12 +1,13 @@
 package com.example.plantsvszombies
 
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.view.MotionEvent
 
-class Shop (var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
+class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
     var shopPaint = Paint()
     val r = RectF(x1, y1, x2, y2)
 
@@ -16,13 +17,21 @@ class Shop (var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
     var trad = 0f
     val tr = RectF(tx-trad,ty-trad,tx+trad,ty+trad)
 
+    lateinit var resources : Resources
+    val prix_tournesol = resources.getInteger(R.integer.prix_tournesol)
+
     lateinit var plante_touchee : String
+    var modeAchat = false
 
     fun onTouch(e : MotionEvent){
         val xtouch = e.rawX - 100
         val ytouch = e.rawY - 100
 
-        
+        if(tr.contains(xtouch, ytouch) && this.achetable("Tournesol")){
+            plante_touchee = "Tournesol"
+            modeAchat = true
+        }
+
     }
 
 
@@ -38,7 +47,13 @@ class Shop (var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
         tr.set(tx-trad,ty-trad,tx+trad,ty+trad)
     }
 
-    fun achetable(){
+    fun achetable(plante : String): Boolean {
+        var achetable = false
 
+        when(plante){
+            "Tournesol" -> achetable = prix_tournesol < credit.credit
+        }
+
+        return achetable
     }
 }
