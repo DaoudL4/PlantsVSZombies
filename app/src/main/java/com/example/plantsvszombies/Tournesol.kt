@@ -14,9 +14,8 @@ class Tournesol(case: Case, var rayon : Float) : Plante(case) {
     var paint = Paint()
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
 
-    lateinit var resources : Resources
 
-    override val cout = resources.getInteger(R.integer.prix_tournesol)
+    override val cout = 50
 
     override fun draw(canvas : Canvas){
         paint.color = Color.YELLOW

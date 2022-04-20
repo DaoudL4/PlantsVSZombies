@@ -26,8 +26,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var credit = Credit(0f,0f,0f)
     var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
-
-    lateinit var plantes : ArrayList<Plante>
+    val plantes = ArrayList<Plante>()
 
     init {
         backgroundPaint.color = Color.WHITE
@@ -38,10 +37,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         if(e.action == MotionEvent.ACTION_DOWN){
             soleil.onTouch(e)
             shop.onTouch(e)
+
             if(shop.modeAchat) {
                 for (i in 0..ncaseY - 1) {
                     for (j in 0..ncaseX - 1) {
-                        cases[i][j].onTouch(e, shop)
+                        cases[i][j].onTouch(e)
                     }
                 }
             }
@@ -73,11 +73,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
     }
 
-    fun achatPlante(plante : String, case: Case) {
+    fun achatPlante(case: Case) {
+        val plante = shop.plante_touchee
         when(plante){
             "Tournesol" -> {
                 plantes.add(Tournesol(case, 100f))
-                credit.updateCredit(resources.getInteger(R.integer.prix_tournesol))
+                credit.updateCredit(-resources.getInteger(R.integer.prix_tournesol))
                 shop.modeAchat = false
             }
 

@@ -20,12 +20,12 @@ class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur
         canvas.drawRect(case, paint)
     }
 
-    fun onTouch(e : MotionEvent, shop: Shop){
+    fun onTouch(e : MotionEvent){
         val xtouch = e.rawX - 100
         val ytouch = e.rawY - 100
 
         if(case.contains(xtouch, ytouch) && !occupe){
-            view.achatPlante(shop.plante_touchee, this)
+            view.achatPlante(this)
             occupe = true
         }
     }

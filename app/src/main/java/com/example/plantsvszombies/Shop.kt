@@ -17,8 +17,7 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
     var trad = 0f
     val tr = RectF(tx-trad,ty-trad,tx+trad,ty+trad)
 
-    lateinit var resources : Resources
-    val prix_tournesol = resources.getInteger(R.integer.prix_tournesol)
+    val prix_tournesol = 50
 
     lateinit var plante_touchee : String
     var modeAchat = false
@@ -33,7 +32,6 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         }
 
     }
-
 
     fun draw(canvas : Canvas){
         shopPaint.color = Color.BLUE
@@ -51,7 +49,7 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         var achetable = false
 
         when(plante){
-            "Tournesol" -> achetable = prix_tournesol < credit.credit
+            "Tournesol" -> achetable = prix_tournesol <= credit.credit
         }
 
         return achetable
