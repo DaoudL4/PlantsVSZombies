@@ -8,13 +8,15 @@ import android.graphics.RectF
 
 
 
-class Tournesol(case: Case, var rayon : Float) : Plante(case) {
+class Tournesol(case: Case, var rayon : Float, var soleil: Soleil) : Plante(case) {
     var posX = case.posX
     var posY = case.posY
     var paint = Paint()
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
 
-
+    init {
+        soleil.changeFreq(1.2f)
+    }
     override val cout = 50
 
     override fun draw(canvas : Canvas){

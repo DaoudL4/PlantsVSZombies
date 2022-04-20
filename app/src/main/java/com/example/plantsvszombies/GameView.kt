@@ -77,7 +77,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         val plante = shop.plante_touchee
         when(plante){
             "Tournesol" -> {
-                plantes.add(Tournesol(case, 50f))
+                plantes.add(Tournesol(case, 50f, soleil))
                 credit.updateCredit(-resources.getInteger(R.integer.prix_tournesol))
                 shop.modeAchat = false
             }

@@ -7,7 +7,7 @@ import android.graphics.RectF
 import android.view.MotionEvent
 
 class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) {
-    var periode = 3
+    var periode = 5f
     var t0 = 0L
     var etat = true
     val increment = 50
@@ -38,6 +38,10 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) 
         if(etat) paint.color = Color.argb(255,255,165,0)
         else paint.color = Color.argb(100,255,165,0)
         canvas.drawOval(r, paint)
+    }
+
+    fun changeFreq(coefficient : Float){
+        periode/=coefficient
     }
 
     fun set(){
