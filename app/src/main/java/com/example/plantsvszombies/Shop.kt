@@ -19,7 +19,10 @@ class Shop (var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
     lateinit var plante_touchee : String
 
     fun onTouch(e : MotionEvent){
+        val xtouch = e.rawX - 100
+        val ytouch = e.rawY - 100
 
+        
     }
 
 
