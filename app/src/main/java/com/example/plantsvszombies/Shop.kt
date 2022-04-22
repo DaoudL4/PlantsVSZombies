@@ -55,3 +55,4 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         return achetable
     }
 }
+

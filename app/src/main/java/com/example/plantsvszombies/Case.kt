@@ -25,7 +25,7 @@ class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur
         val ytouch = e.rawY - 100
 
         if(case.contains(xtouch, ytouch) && !occupe){
-            view.achatPlante(this)
+            view.achatPlante( this)
             occupe = true
         }
     }
