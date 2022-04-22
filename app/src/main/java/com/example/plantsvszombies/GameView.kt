@@ -27,10 +27,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
     val plantes = ArrayList<Plante>()
+    lateinit var zombie : Zombie
 
     init {
         backgroundPaint.color = Color.WHITE
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
+        zombie = Zombie(cases[0][8], 0f, 0f, 0f)
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean{
@@ -68,6 +70,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             shop.draw(canvas)
             credit.draw(canvas)
             soleil.draw(canvas)
+            zombie.draw(canvas)
 
             holder.unlockCanvasAndPost(canvas)
         }
@@ -122,6 +125,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         soleil.rayon = largeurCase/2
         soleil.set()
 
+        zombie.rayon = largeurCase/2
+        zombie.set()
 
     }
 
@@ -158,5 +163,3 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     }
 
 }
-
-DAOUD LE BG
