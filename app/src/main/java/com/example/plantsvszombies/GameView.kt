@@ -29,13 +29,13 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
     val plantes = ArrayList<Plante>()
-    lateinit var zombie : Zombie
+    var zombie : Zombie
 
 
     init {
         backgroundPaint.color = Color.argb(255, 243, 240, 248)
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
-        zombie = Zombie(cases[0][8], 0f, 0f, 0f)
+        zombie = Zombie(0, 0f, 0f, 0f, cases)
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean{
@@ -88,6 +88,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                 plantes.add(Tournesol(case, 50f, soleil))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
+                zombie.listeCase = cases
             }
 
         }
@@ -136,11 +137,16 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     }
 
     override fun run() {
+        var previousTime = System.currentTimeMillis()
         while(drawing) {
+            var currentTime = System.currentTimeMillis()
             draw()
+            zombie.avance((currentTime-previousTime).toDouble())
             if(soleil.etat == false && System.currentTimeMillis() - soleil.t0 > soleil.periode*1000){
                 soleil.changeEtat()
             }
+            previousTime = currentTime
+
         }
     }
 

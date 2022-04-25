@@ -9,7 +9,7 @@ class Tournesol(case: Case, var rayon : Float, soleil: Soleil) : Plante(case) {
     var posX = case.posX
     var posY = case.posY
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
-    var sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.tournesol_sprite)
+    var sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.tournesol2)
 
     init {
         soleil.changeFreq(1.2f)
