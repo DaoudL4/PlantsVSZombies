@@ -1,6 +1,8 @@
 package com.example.plantsvszombies
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -29,8 +31,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     val plantes = ArrayList<Plante>()
     lateinit var zombie : Zombie
 
+
     init {
-        backgroundPaint.color = Color.WHITE
+        backgroundPaint.color = Color.argb(255, 243, 240, 248)
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
         zombie = Zombie(cases[0][8], 0f, 0f, 0f)
     }
@@ -78,10 +81,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
     fun achatPlante(case: Case) {
         val plante = shop.plante_touchee
+        val cout : Int
         when(plante){
             "Tournesol" -> {
+                cout = resources.getInteger(R.integer.prix_tournesol)
                 plantes.add(Tournesol(case, 50f, soleil))
-                credit.updateCredit(-resources.getInteger(R.integer.prix_tournesol))
+                credit.updateCredit(-cout)
                 shop.modeAchat = false
             }
 

@@ -1,10 +1,8 @@
 package com.example.plantsvszombies
 
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.view.MotionEvent
+import androidx.core.graphics.toRect
 
 class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) {
     var periode = 5f
@@ -12,8 +10,10 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) 
     var etat = true
     val increment = 50
 
-    var paint = Paint()
+    var paintFond = Paint()
     val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
+    var spriteActif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite)
+    var spriteInactif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite_desac)
 
     fun onTouch(e : MotionEvent){
         val xtouch = e.rawX - 100
@@ -35,9 +35,10 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) 
     }
 
     fun draw(canvas: Canvas) {
-        if(etat) paint.color = Color.argb(255,255,165,0)
-        else paint.color = Color.argb(100,255,165,0)
-        canvas.drawOval(r, paint)
+        paintFond.color = Color.argb(255,3, 138, 255)
+        canvas.drawOval(r, paintFond)
+        if(etat) canvas.drawBitmap(spriteActif, null, r.toRect(), null)
+        else canvas.drawBitmap(spriteInactif, null, r.toRect(), null)
     }
 
     fun changeFreq(coefficient : Float){
