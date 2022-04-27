@@ -29,4 +29,8 @@ class Credit(var x : Float, var y: Float, var rayon: Float) {
     fun updateCredit(montant : Int) {
         credit += montant
     }
+
+    fun reset(){
+        credit = 0
+    }
 }

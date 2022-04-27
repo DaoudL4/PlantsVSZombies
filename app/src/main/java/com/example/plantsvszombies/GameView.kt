@@ -1,15 +1,21 @@
 package com.example.plantsvszombies
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
     lateinit var canvas : Canvas
@@ -24,18 +30,19 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var longueurCase = 0f
     var distanceCaseX = 0f
     var distanceCaseY = 0f
-
     var credit = Credit(0f,0f,0f)
     var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
-    val plantes = ArrayList<Plante>()
+    var plantes = ArrayList<Plante>()
     var zombie : Zombie
 
+    var gameOver = false
+    val activity = context as FragmentActivity
 
     init {
         backgroundPaint.color = Color.argb(255, 243, 240, 248)
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
-        zombie = Zombie(0, 0f, 0f, 0f, cases)
+        zombie = Zombie(0, 0f, cases, this)
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean{
@@ -85,12 +92,18 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         when(plante){
             "Tournesol" -> {
                 cout = resources.getInteger(R.integer.prix_tournesol)
-                plantes.add(Tournesol(case, 50f, soleil))
+                plantes.add(Tournesol(case, 75f, soleil))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 zombie.listeCase = cases
             }
-
+            "Plante_verte" -> {
+                cout = resources.getInteger(R.integer.prix_planteVerte)
+                plantes.add(Plante_verte(case, 100f))
+                credit.updateCredit(-cout)
+                shop.modeAchat = false
+                zombie.listeCase = cases
+            }
         }
     }
 
@@ -116,9 +129,10 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         shop.y1 = 0f
         shop.x2 = shop.x1 + 6*largeurCase
         shop.y2 = 1.5f*longueurCase
-        shop.trad = shop.y2/3
-        shop.tx = shop.x1+shop.trad+15f
-        shop.ty = shop.y2/2
+        shop.planterad = shop.y2/3
+        shop.plantey = shop.y2/2
+        shop.tx = shop.x1+shop.planterad+15f
+        shop.px = shop.x1+shop.planterad+15f+largeurCase
         shop.set()
 
         credit.x = shop.x1/2
@@ -134,16 +148,31 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         zombie.rayon = largeurCase/2
         zombie.set()
 
+        for(p in plantes){
+            p.set()
+        }
+
     }
 
     override fun run() {
         var previousTime = System.currentTimeMillis()
         while(drawing) {
-            var currentTime = System.currentTimeMillis()
+            val currentTime = System.currentTimeMillis()
+            val interval = (currentTime-previousTime).toDouble()
+
             draw()
-            zombie.avance((currentTime-previousTime).toDouble())
-            if(soleil.etat == false && System.currentTimeMillis() - soleil.t0 > soleil.periode*1000){
+            zombie.avance(interval)
+
+            if(!soleil.etat && currentTime - soleil.t0 > soleil.periode*1000){
                 soleil.changeEtat()
+            }
+            for (p in plantes) {
+                if (p is Plante_verte){
+                    p.avanceBalles(interval)
+                    if(currentTime - p.t0 > p.periode_tir*1000){
+                        p.tir()
+                    }
+                }
             }
             previousTime = currentTime
 
@@ -173,4 +202,69 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         TODO("Not yet implemented")
     }
 
+    /*
+    fun newGame(){
+        plantes = ArrayList<Plante>()
+        credit.reset()
+        soleil.reset()
+        for (i in 0..ncaseY-1){
+            for (j in 0..ncaseX-1){
+                cases[i][j].reset()
+            }
+        }
+
+        drawing = true
+        if(gameOver){
+            gameOver = false
+            thread = Thread(this)
+            thread.start()
+        }
+    }
+
+    fun showGameOver(messageId: Int) {
+        class GameResult: DialogFragment() {
+            override fun onCreateDialog(bundle: Bundle?): Dialog {
+
+                val builder = AlertDialog.Builder(getActivity())
+                builder.setTitle(resources.getString(messageId))
+                builder.setMessage(
+                    resources.getString(
+                        R.string.results_format
+                    )
+                )
+                builder.setPositiveButton(R.string.reset_game,
+                    DialogInterface.OnClickListener { _, _->newGame()}
+                )
+                return builder.create()
+            }
+        }
+
+        activity.runOnUiThread(
+            Runnable {
+                val ft = activity.supportFragmentManager.beginTransaction()
+                val prev =
+                    activity.supportFragmentManager.findFragmentByTag("dialog")
+                if (prev != null) {
+                    ft.remove(prev)
+                }
+                ft.addToBackStack(null)
+                val gameResult = GameResult()
+                gameResult.setCancelable(false)
+                gameResult.show(ft,"dialog")
+            }
+        )
+    }
+
+    fun gameOver_win(){
+        drawing = false
+        showGameOver(R.string.win)
+        gameOver = true
+    }
+    fun gameOver_lose(){
+        drawing = false
+        showGameOver(R.string.lose)
+        gameOver = true
+    }
+
+     */
 }

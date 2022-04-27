@@ -4,7 +4,7 @@ import android.graphics.*
 import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
-class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) {
+class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float){
     var periode = 5f
     var t0 = 0L
     var etat = true
@@ -14,6 +14,7 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) 
     val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
     var spriteActif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite)
     var spriteInactif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite_desac)
+
 
     fun onTouch(e : MotionEvent){
         val xtouch = e.rawX - 100
@@ -47,6 +48,10 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) 
 
     fun set(){
         r.set(x-rayon, y-rayon,x+rayon, y+rayon)
+    }
+
+    fun reset(){
+        periode = 5f
     }
 
 }

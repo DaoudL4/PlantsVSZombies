@@ -10,12 +10,18 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
     var shopPaint = Paint()
     val r = RectF(x1, y1, x2, y2)
 
+    var plantey = 0f
+    var planterad = 0f
+
     var tx = 0f
-    var ty = 0f
-    var trad = 0f
-    val tr = RectF(tx-trad,ty-trad,tx+trad,ty+trad)
+    val tr = RectF(tx-planterad,plantey-planterad,tx+planterad,plantey+planterad)
     val prix_tournesol = App.instance.resources.getInteger(R.integer.prix_tournesol)
     var tsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.shop_tournesol)
+
+    var px = 0f
+    val pr = RectF(px-planterad,plantey-planterad,px+planterad,plantey+planterad)
+    val prix_planteVerte = App.instance.resources.getInteger(R.integer.prix_planteVerte)
+    var psprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sprite_verte_shop)
 
     lateinit var plante_touchee : String
     var modeAchat = false
@@ -28,6 +34,10 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
             plante_touchee = "Tournesol"
             modeAchat = true
         }
+        if(pr.contains(xtouch, ytouch) && this.achetable("Plante_verte")){
+            plante_touchee = "Plante_verte"
+            modeAchat = true
+        }
 
     }
 
@@ -35,11 +45,13 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         shopPaint.color = Color.BLUE
         canvas.drawRect(r, shopPaint)
         canvas.drawBitmap(tsprite, null, tr.toRect(), null)
+        canvas.drawBitmap(psprite, null, pr.toRect(), null)
     }
 
     fun set(){
         r.set(x1, y1, x2, y2)
-        tr.set(tx-trad,ty-trad,tx+trad,ty+trad)
+        tr.set(tx-planterad,plantey-planterad,tx+planterad,plantey+planterad)
+        pr.set(px-planterad,plantey-planterad,px+planterad,plantey+planterad)
     }
 
     fun achetable(plante : String): Boolean {
@@ -47,6 +59,7 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
 
         when(plante){
             "Tournesol" -> achetable = prix_tournesol <= credit.credit
+            "Plante_verte" -> achetable = prix_planteVerte <= credit.credit
         }
 
         return achetable

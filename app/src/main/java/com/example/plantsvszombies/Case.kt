@@ -35,4 +35,5 @@ class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur
         case.set((posX-largeur/2), (posY-longueur/2),(posX+largeur/2),(posY+longueur/2))
     }
 
+
 }
