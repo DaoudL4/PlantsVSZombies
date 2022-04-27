@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import androidx.core.graphics.toRect
 
-class Balle(val indice : Int, val planteAttaque: Plante_attaque) {
+class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie: Zombie) {
     val case0 = planteAttaque.case
     var posX = case0.posX
     var posY = case0.posY
@@ -25,7 +25,7 @@ class Balle(val indice : Int, val planteAttaque: Plante_attaque) {
     }
 
     fun doitDisparaitre() : Boolean{
-        return(posX > 300)
+        return(zombie.r.contains(r.centerX(), r.centerY()))
     }
 
     fun destruction(){

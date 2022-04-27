@@ -99,7 +99,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
-                plantes.add(Plante_verte(case, 100f))
+                plantes.add(Plante_verte(case, 100f, zombie))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 zombie.listeCase = cases

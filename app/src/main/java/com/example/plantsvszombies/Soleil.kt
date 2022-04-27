@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
 class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float){
-    var periode = 5f
+    var periode = 1f
     var t0 = 0L
     var etat = true
     val increment = 50
