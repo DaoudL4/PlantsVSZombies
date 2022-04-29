@@ -5,13 +5,13 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import androidx.core.graphics.toRect
 
-abstract class Plante_attaque(case: Case, rayon : Float, val zombie: Zombie) : Plante(case, rayon) {
-    val periode_tir = 2
+abstract class Plante_attaque(case: Case, rayon : Float, val zombies: ArrayList<Zombie>) : Plante(case, rayon) {
+    val periode_tir = 1
     var t0 = 0L
     open var balles = ArrayList<Balle>()
 
     fun tir(){
-        balles.add(Balle(balles.size-1, this, zombie))
+        balles.add(Balle(balles.size-1, this, zombies))
         t0 = System.currentTimeMillis()
     }
 

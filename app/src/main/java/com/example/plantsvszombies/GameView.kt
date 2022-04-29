@@ -16,6 +16,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import kotlin.random.Random
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
     lateinit var canvas : Canvas
@@ -34,7 +35,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
     var plantes = ArrayList<Plante>()
-    var zombie : Zombie
+    var zombies = ArrayList<Zombie>()
+    val periodeSpawnZombie = 7
+    var spawnt0 = 0L
 
     var gameOver = false
     val activity = context as FragmentActivity
@@ -42,7 +45,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     init {
         backgroundPaint.color = Color.argb(255, 243, 240, 248)
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
-        zombie = Zombie(0, 0f, cases, this)
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean{
@@ -80,7 +82,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             shop.draw(canvas)
             credit.draw(canvas)
             soleil.draw(canvas)
-            zombie.draw(canvas)
+            for (z in zombies) {
+                z.draw(canvas)
+            }
 
             holder.unlockCanvasAndPost(canvas)
         }
@@ -95,14 +99,18 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                 plantes.add(Tournesol(case, 75f, soleil))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
-                zombie.listeCase = cases
+                for (z in zombies) {
+                    z.listeCase = cases
+                }
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
-                plantes.add(Plante_verte(case, 100f, zombie))
+                plantes.add(Plante_verte(case, 100f, zombies))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
-                zombie.listeCase = cases
+                for (z in zombies) {
+                    z.listeCase = cases
+                }
             }
         }
     }
@@ -145,8 +153,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         soleil.rayon = largeurCase/2
         soleil.set()
 
-        zombie.rayon = largeurCase/2
-        zombie.set()
+        for (z in zombies) {
+            z.set()
+        }
 
         for(p in plantes){
             p.set()
@@ -161,11 +170,19 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             val interval = (currentTime-previousTime).toDouble()
 
             draw()
-            zombie.avance(interval)
+            for (z in zombies) {
+                z.avance(interval)
+            }
 
             if(!soleil.etat && currentTime - soleil.t0 > soleil.periode*1000){
                 soleil.changeEtat()
             }
+
+            if(currentTime - spawnt0 > periodeSpawnZombie*1000){
+                zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this))
+                spawnt0 = currentTime
+            }
+
             for (p in plantes) {
                 if (p is Plante_verte){
                     p.avanceBalles(interval)
