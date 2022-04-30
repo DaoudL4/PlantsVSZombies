@@ -15,12 +15,14 @@ class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var avance = true
 
-    var sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
+    var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
+    var sprite_gele = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_gel)
 
 
 
     fun draw(canvas : Canvas){
-        canvas.drawBitmap(sprite, null, r.toRect(), null)
+        if(!estGele) canvas.drawBitmap(sprite_normal, null, r.toRect(), null)
+        else canvas.drawBitmap(sprite_gele, null, r.toRect(), null)
     }
 
     fun avance(interval : Double){
