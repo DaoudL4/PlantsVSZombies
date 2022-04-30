@@ -5,15 +5,13 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.res.Resources
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import androidx.core.graphics.toRect
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -44,7 +42,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     val activity = context as FragmentActivity
 
     init {
-        backgroundPaint.color = Color.argb(255, 243, 240, 248)
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
     }
 
@@ -68,8 +65,10 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     fun draw(){
         if(holder.surface.isValid){
             canvas = holder.lockCanvas()
-            canvas.drawRect(0f, 0f, canvas.width.toFloat(),
-                canvas.height.toFloat(), backgroundPaint)
+            canvas.drawBitmap(BitmapFactory.decodeResource(App.instance.resources, R.drawable.background)
+            , null, RectF(0f, 0f, canvas.width.toFloat(),
+                    canvas.height.toFloat()).toRect(), null)
+
 
             for (i in 0..ncaseY-1){
                 for (j in 0..ncaseX-1){
@@ -111,7 +110,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
-                plantes.add(Plante_verte(case, 100f, zombies))
+                plantes.add(Plante_verte(case, 100f, zombies, plantes))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -120,7 +119,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_glace" -> {
                 cout = resources.getInteger(R.integer.prix_planteGlace)
-                plantes.add(Plante_glace(case, 75f, zombies))
+                plantes.add(Plante_glace(case, 75f, zombies, plantes))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -130,6 +129,15 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             "Noix" -> {
                 cout = resources.getInteger(R.integer.prix_noix)
                 plantes.add(Noix(case, 75f))
+                credit.updateCredit(-cout)
+                shop.modeAchat = false
+                for (z in zombies) {
+                    z.listeCase = cases
+                }
+            }
+            "Buche" -> {
+                cout = resources.getInteger(R.integer.prix_buche)
+                plantes.add(Buche(case, 75f))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -167,6 +175,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         shop.pvx = shop.x1+shop.planterad+15f+largeurCase
         shop.pgx = shop.x1+shop.planterad+15f+2*largeurCase
         shop.nx = shop.x1+shop.planterad+15f+3*largeurCase
+        shop.bx = shop.x1+shop.planterad+15f+4*largeurCase
         shop.set()
 
         credit.x = shop.x1/2

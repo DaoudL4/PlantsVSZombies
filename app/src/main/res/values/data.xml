@@ -4,4 +4,5 @@
     <integer name="prix_planteVerte">100</integer>
     <integer name="prix_planteGlace">150</integer>
     <integer name="prix_noix">50</integer>
+    <integer name="prix_buche">150</integer>
 </resources>

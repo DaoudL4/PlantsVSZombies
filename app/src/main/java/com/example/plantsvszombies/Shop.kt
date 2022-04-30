@@ -26,14 +26,17 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
     var pgx = 0f
     val pgr = RectF(pgx-planterad,plantey-planterad,pgx+planterad,plantey+planterad)
     val prix_planteGlace = App.instance.resources.getInteger(R.integer.prix_planteGlace)
-    var pgsprite = BitmapFactory.decodeResource(App.instance.resources,
-        R.drawable.plante_glace_shop
-    )
+    var pgsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.plante_glace_shop)
 
     var nx = 0f
     val nr = RectF(nx-planterad,plantey-planterad,nx+planterad,plantey+planterad)
     val prix_noix = App.instance.resources.getInteger(R.integer.prix_noix)
     var nsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sprite_noix_shop)
+
+    var bx = 0f
+    val br = RectF(bx-planterad,plantey-planterad,bx+planterad,plantey+planterad)
+    val prix_buche = App.instance.resources.getInteger(R.integer.prix_buche)
+    var bsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.buche_shop)
 
     lateinit var plante_touchee : String
     var modeAchat = false
@@ -58,6 +61,10 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
             plante_touchee = "Noix"
             modeAchat = true
         }
+        if(br.contains(xtouch, ytouch) && this.achetable("Buche")){
+            plante_touchee = "Buche"
+            modeAchat = true
+        }
 
     }
 
@@ -68,6 +75,7 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         canvas.drawBitmap(pvsprite, null, pvr.toRect(), null)
         canvas.drawBitmap(pgsprite, null, pgr.toRect(), null)
         canvas.drawBitmap(nsprite, null, nr.toRect(), null)
+        canvas.drawBitmap(bsprite, null, br.toRect(), null)
     }
 
     fun set(){
@@ -76,6 +84,7 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         pvr.set(pvx-planterad,plantey-planterad,pvx+planterad,plantey+planterad)
         pgr.set(pgx-planterad,plantey-planterad,pgx+planterad,plantey+planterad)
         nr.set(nx-planterad,plantey-planterad,nx+planterad,plantey+planterad)
+        br.set(bx-planterad,plantey-planterad,bx+planterad,plantey+planterad)
     }
 
     fun achetable(plante : String): Boolean {
@@ -86,6 +95,7 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
             "Plante_verte" -> achetable = prix_planteVerte <= credit.credit
             "Plante_glace" -> achetable = prix_planteGlace <= credit.credit
             "Noix" -> achetable = prix_noix <= credit.credit
+            "Buche" -> achetable = prix_buche <= credit.credit
         }
 
         return achetable

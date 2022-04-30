@@ -6,13 +6,13 @@ import android.graphics.RectF
 import androidx.core.graphics.toRect
 import java.util.concurrent.ConcurrentLinkedQueue
 
-abstract class Plante_attaque(case: Case, rayon : Float, val zombies: ArrayList<Zombie>) : Plante(case, rayon) {
+abstract class Plante_attaque(case: Case, rayon : Float, val zombies: ArrayList<Zombie>, val plantes: ConcurrentLinkedQueue<Plante>) : Plante(case, rayon) {
     val periode_tir = 1
     var t0 = 0L
     var balles = ConcurrentLinkedQueue<Balle>()
 
     open fun tir(){
-        balles.add(Balle(balles.size-1, this, zombies))
+        balles.add(Balle(balles.size-1, this, zombies, plantes))
         t0 = System.currentTimeMillis()
     }
 

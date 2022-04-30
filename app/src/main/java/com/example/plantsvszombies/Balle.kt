@@ -4,13 +4,14 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.RectF
 import androidx.core.graphics.toRect
+import java.util.concurrent.ConcurrentLinkedQueue
 
-open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombies: ArrayList<Zombie>) {
+open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombies: ArrayList<Zombie>, val plantes: ConcurrentLinkedQueue<Plante>) {
     val case0 = planteAttaque.case
     var posX = case0.posX
     var posY = case0.posY
     var rayon = 50f
-    open val sprite =  BitmapFactory.decodeResource(App.instance.resources, R.drawable.balle)
+    open var sprite =  BitmapFactory.decodeResource(App.instance.resources, R.drawable.balle)
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     lateinit var zombietouche: Zombie
     val vitesse = 1
@@ -22,6 +23,23 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
         if(toucheZombie()){
             quandToucheZombie()
         }
+        if(toucheBuche()){
+            enflamme()
+        }
+    }
+
+    open fun enflamme() {
+        sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.balle_feu)
+    }
+
+    fun toucheBuche(): Boolean {
+        var res = false
+        for (p in plantes){
+            if(p is Buche && p.r.contains(r.centerX(), r.centerY())){
+                res = true
+            }
+        }
+        return res
     }
 
     open fun quandToucheZombie() {
