@@ -18,10 +18,22 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
     val prix_tournesol = App.instance.resources.getInteger(R.integer.prix_tournesol)
     var tsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.shop_tournesol)
 
-    var px = 0f
-    val pr = RectF(px-planterad,plantey-planterad,px+planterad,plantey+planterad)
+    var pvx = 0f
+    val pvr = RectF(pvx-planterad,plantey-planterad,pvx+planterad,plantey+planterad)
     val prix_planteVerte = App.instance.resources.getInteger(R.integer.prix_planteVerte)
-    var psprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sprite_verte_shop)
+    var pvsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sprite_verte_shop)
+
+    var pgx = 0f
+    val pgr = RectF(pgx-planterad,plantey-planterad,pgx+planterad,plantey+planterad)
+    val prix_planteGlace = App.instance.resources.getInteger(R.integer.prix_planteGlace)
+    var pgsprite = BitmapFactory.decodeResource(App.instance.resources,
+        R.drawable.plante_glace_shop
+    )
+
+    var nx = 0f
+    val nr = RectF(nx-planterad,plantey-planterad,nx+planterad,plantey+planterad)
+    val prix_noix = App.instance.resources.getInteger(R.integer.prix_noix)
+    var nsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sprite_noix_shop)
 
     lateinit var plante_touchee : String
     var modeAchat = false
@@ -34,8 +46,16 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
             plante_touchee = "Tournesol"
             modeAchat = true
         }
-        if(pr.contains(xtouch, ytouch) && this.achetable("Plante_verte")){
+        if(pvr.contains(xtouch, ytouch) && this.achetable("Plante_verte")){
             plante_touchee = "Plante_verte"
+            modeAchat = true
+        }
+        if(pgr.contains(xtouch, ytouch) && this.achetable("Plante_glace")){
+            plante_touchee = "Plante_glace"
+            modeAchat = true
+        }
+        if(nr.contains(xtouch, ytouch) && this.achetable("Noix")){
+            plante_touchee = "Noix"
             modeAchat = true
         }
 
@@ -45,13 +65,17 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         shopPaint.color = Color.BLUE
         canvas.drawRect(r, shopPaint)
         canvas.drawBitmap(tsprite, null, tr.toRect(), null)
-        canvas.drawBitmap(psprite, null, pr.toRect(), null)
+        canvas.drawBitmap(pvsprite, null, pvr.toRect(), null)
+        canvas.drawBitmap(pgsprite, null, pgr.toRect(), null)
+        canvas.drawBitmap(nsprite, null, nr.toRect(), null)
     }
 
     fun set(){
         r.set(x1, y1, x2, y2)
         tr.set(tx-planterad,plantey-planterad,tx+planterad,plantey+planterad)
-        pr.set(px-planterad,plantey-planterad,px+planterad,plantey+planterad)
+        pvr.set(pvx-planterad,plantey-planterad,pvx+planterad,plantey+planterad)
+        pgr.set(pgx-planterad,plantey-planterad,pgx+planterad,plantey+planterad)
+        nr.set(nx-planterad,plantey-planterad,nx+planterad,plantey+planterad)
     }
 
     fun achetable(plante : String): Boolean {
@@ -60,6 +84,8 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         when(plante){
             "Tournesol" -> achetable = prix_tournesol <= credit.credit
             "Plante_verte" -> achetable = prix_planteVerte <= credit.credit
+            "Plante_glace" -> achetable = prix_planteGlace <= credit.credit
+            "Noix" -> achetable = prix_noix <= credit.credit
         }
 
         return achetable

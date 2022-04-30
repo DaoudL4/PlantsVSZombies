@@ -5,30 +5,35 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import androidx.core.graphics.toRect
 
-class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombies: ArrayList<Zombie>) {
+open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombies: ArrayList<Zombie>) {
     val case0 = planteAttaque.case
     var posX = case0.posX
     var posY = case0.posY
     var rayon = 50f
-    val sprite =  BitmapFactory.decodeResource(App.instance.resources, R.drawable.balle)
+    open val sprite =  BitmapFactory.decodeResource(App.instance.resources, R.drawable.balle)
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
-
+    lateinit var zombietouche: Zombie
     val vitesse = 1
     val degats = 10
 
-    fun launch(interval : Double) {
+    open fun launch(interval : Double) {
         r.offset((vitesse * interval).toFloat(), 0f)
 
-        if(doitDisparaitre()){
-            destruction()
+        if(toucheZombie()){
+            quandToucheZombie()
         }
     }
 
-    fun doitDisparaitre() : Boolean{
+    open fun quandToucheZombie() {
+        destruction()
+    }
+
+    fun toucheZombie() : Boolean{
         var res = false
         for (z in zombies){
             if(z.r.contains(r.centerX(), r.centerY())){
                 res = true
+                zombietouche = z
             }
         }
         return res

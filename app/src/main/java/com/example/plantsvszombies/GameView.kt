@@ -16,6 +16,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.random.Random
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
@@ -34,7 +35,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var credit = Credit(0f,0f,0f)
     var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
-    var plantes = ArrayList<Plante>()
+    var plantes = ConcurrentLinkedQueue<Plante>()
     var zombies = ArrayList<Zombie>()
     val periodeSpawnZombie = 7
     var spawnt0 = 0L
@@ -76,9 +77,14 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                 }
             }
 
-            for (p in plantes){
+
+            val iterator = plantes.iterator()
+            while(iterator.hasNext()){
+                val p = iterator.next()
                 p.draw(canvas)
             }
+
+
             shop.draw(canvas)
             credit.draw(canvas)
             soleil.draw(canvas)
@@ -106,6 +112,24 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
                 plantes.add(Plante_verte(case, 100f, zombies))
+                credit.updateCredit(-cout)
+                shop.modeAchat = false
+                for (z in zombies) {
+                    z.listeCase = cases
+                }
+            }
+            "Plante_glace" -> {
+                cout = resources.getInteger(R.integer.prix_planteGlace)
+                plantes.add(Plante_glace(case, 75f, zombies))
+                credit.updateCredit(-cout)
+                shop.modeAchat = false
+                for (z in zombies) {
+                    z.listeCase = cases
+                }
+            }
+            "Noix" -> {
+                cout = resources.getInteger(R.integer.prix_noix)
+                plantes.add(Noix(case, 75f))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -140,7 +164,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         shop.planterad = shop.y2/3
         shop.plantey = shop.y2/2
         shop.tx = shop.x1+shop.planterad+15f
-        shop.px = shop.x1+shop.planterad+15f+largeurCase
+        shop.pvx = shop.x1+shop.planterad+15f+largeurCase
+        shop.pgx = shop.x1+shop.planterad+15f+2*largeurCase
+        shop.nx = shop.x1+shop.planterad+15f+3*largeurCase
         shop.set()
 
         credit.x = shop.x1/2
@@ -185,6 +211,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
             for (p in plantes) {
                 if (p is Plante_verte){
+                    p.avanceBalles(interval)
+                    if(currentTime - p.t0 > p.periode_tir*1000){
+                        p.tir()
+                    }
+                }
+                if (p is Plante_glace){
                     p.avanceBalles(interval)
                     if(currentTime - p.t0 > p.periode_tir*1000){
                         p.tir()

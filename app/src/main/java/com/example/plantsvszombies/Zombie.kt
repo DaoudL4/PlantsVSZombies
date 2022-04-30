@@ -9,6 +9,7 @@ class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>
     var case = listeCase[ligne][8]
     var posX = case.posX
     var posY = case.posY
+    var estGele = false
     var vitesse =0.03
     var pv = 200
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
@@ -26,7 +27,13 @@ class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>
         currentCase()
 
         if(avance) {
-            r.offset(-(vitesse * interval).toFloat(), 0f)
+            if(!estGele){
+                r.offset(-(vitesse * interval).toFloat(), 0f)
+            }
+            else{
+                r.offset(-(vitesse/5 * interval).toFloat(), 0f)
+            }
+
         }
         /*
         if(depasse()){
@@ -54,5 +61,9 @@ class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>
 
     fun depasse() : Boolean{
         return (r.centerX()<listeCase[ligne][0].posX)
+    }
+
+    fun gele() {
+        estGele = true
     }
 }

@@ -4,25 +4,29 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.RectF
 import androidx.core.graphics.toRect
+import java.util.concurrent.ConcurrentLinkedQueue
 
 abstract class Plante_attaque(case: Case, rayon : Float, val zombies: ArrayList<Zombie>) : Plante(case, rayon) {
     val periode_tir = 1
     var t0 = 0L
-    open var balles = ArrayList<Balle>()
+    var balles = ConcurrentLinkedQueue<Balle>()
 
-    fun tir(){
+    open fun tir(){
         balles.add(Balle(balles.size-1, this, zombies))
         t0 = System.currentTimeMillis()
     }
 
     fun avanceBalles(interval: Double){
-        for (i in balles) {
-            i.launch(interval)
+        val iterator = balles.iterator()
+        while(iterator.hasNext()){
+            val b = iterator.next()
+            b.launch(interval)
         }
+
     }
 
-    fun delBalle(indice: Int) {
-        balles.removeFirst()
+    fun delBalle(indice : Int) {
+        balles.removeAll{it.indice == indice}
     }
 
     override fun draw(canvas: Canvas){
