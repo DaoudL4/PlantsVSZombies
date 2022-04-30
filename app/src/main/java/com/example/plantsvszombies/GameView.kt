@@ -214,7 +214,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
 
             if(currentTime - spawnt0 > periodeSpawnZombie*1000){
-                zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this))
+                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this))
+                else zombies.add(Zombie_cone(Random.nextInt(0,3), 100f, cases, this))
                 spawnt0 = currentTime
             }
 

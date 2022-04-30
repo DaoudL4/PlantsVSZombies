@@ -5,18 +5,18 @@ import android.util.Log
 import androidx.core.graphics.toRect
 
 
-class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>>, val view: GameView) {
+open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>>, val view: GameView) {
     var case = listeCase[ligne][8]
     var posX = case.posX
     var posY = case.posY
     var estGele = false
     var vitesse =0.03
-    var pv = 200
+    open var pv = 200
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var avance = true
 
-    var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
-    var sprite_gele = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_gel)
+    open var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
+    open var sprite_gele = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_gel)
 
 
 
