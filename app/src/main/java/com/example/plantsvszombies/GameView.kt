@@ -102,7 +102,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         when(plante){
             "Tournesol" -> {
                 cout = resources.getInteger(R.integer.prix_tournesol)
-                plantes.add(Tournesol(case, 0f, soleil))
+                plantes.add(Tournesol(case, 75f, soleil))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -111,7 +111,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
-                plantes.add(Plante_verte(case, 0f, zombies, plantes))
+                plantes.add(Plante_verte(case, 75f, zombies, plantes))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -120,7 +120,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_glace" -> {
                 cout = resources.getInteger(R.integer.prix_planteGlace)
-                plantes.add(Plante_glace(case, 0f, zombies, plantes))
+                plantes.add(Plante_glace(case, 75f, zombies, plantes))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -129,7 +129,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Noix" -> {
                 cout = resources.getInteger(R.integer.prix_noix)
-                plantes.add(Noix(case, 0f))
+                plantes.add(Noix(case, 75f))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -138,7 +138,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Buche" -> {
                 cout = resources.getInteger(R.integer.prix_buche)
-                plantes.add(Buche(case, 0f))
+                plantes.add(Buche(case, 75f))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -194,7 +194,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
 
         for(p in plantes){
-            p.rayon = largeurCase
             p.set()
         }
 
@@ -208,7 +207,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             var t = (currentTime-t0).toDouble()
 
             periodeSpawnZombie = (3 + 12*exp(-t/50000)).toFloat()
-            Log.d("tag", periodeSpawnZombie.toString())
+
             draw()
 
             for (z in zombies) {
