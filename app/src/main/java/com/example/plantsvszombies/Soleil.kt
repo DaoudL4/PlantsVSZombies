@@ -51,7 +51,8 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float){
     }
 
     fun reset(){
-        periode = 5f
+        t0 = System.currentTimeMillis()
+        periode = 1f
     }
 
 }

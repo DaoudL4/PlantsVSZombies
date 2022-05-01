@@ -80,7 +80,8 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
     }
 
     fun depasse() : Boolean{
-        return (r.centerX()<listeCase[ligne][0].posX)
+        return (listeCase[ligne][0].case.contains(r.centerX(), r.centerY())
+                && r.centerX()<listeCase[ligne][0].posX)
     }
 
     fun gele() {

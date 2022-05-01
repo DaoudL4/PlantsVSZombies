@@ -40,6 +40,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var periodeSpawnZombie = 0f
     var t0 = 0L
     var spawnt0 = 0L
+    val tempsPartie = 60
 
     var gameOver = false
     val activity = context as FragmentActivity
@@ -258,6 +259,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             previousTime = currentTime
 
+            if(t >= tempsPartie*1000) gameOver_win()
         }
     }
 
@@ -296,6 +298,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                 cases[i][j].reset()
             }
         }
+        t0 = System.currentTimeMillis()
+        spawnt0 = t0
 
         drawing = true
         if(gameOver){
@@ -341,13 +345,13 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
     fun gameOver_win(){
         drawing = false
-        showGameOver(R.string.win)
         gameOver = true
+        showGameOver(R.string.win)
     }
     fun gameOver_lose(){
         drawing = false
-        showGameOver(R.string.lose)
         gameOver = true
+        showGameOver(R.string.lose)
     }
 
 
