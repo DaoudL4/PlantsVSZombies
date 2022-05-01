@@ -25,7 +25,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     lateinit var thread : Thread
 
     var cases : Array<Array<Case>>
-    val ncaseY = 3
+    val ncaseY = 5
     val ncaseX = 9
     var largeurCase = 0f
     var longueurCase = 0f
@@ -59,7 +59,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             if(shop.modeAchat || pelle.destruction) {
                 for (i in 0..ncaseY - 1) {
                     for (j in 0..ncaseX - 1) {
-                        cases[i][j].onTouch(e)
+                        cases[i][j].onTouch(e, shop.modeAchat, pelle.destruction)
                     }
                 }
             }
@@ -102,13 +102,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
     fun achatPlante(case: Case) {
         val plante = shop.plante_touchee
-        val cout : Int
+        var cout = 0
         when(plante){
             "Tournesol" -> {
                 cout = resources.getInteger(R.integer.prix_tournesol)
                 plantes.add(Tournesol(case, 75f, soleil))
-                credit.updateCredit(-cout)
-                shop.modeAchat = false
                 for (z in zombies) {
                     z.listeCase = cases
                 }
@@ -116,8 +114,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
                 plantes.add(Plante_verte(case, 75f, zombies, plantes))
-                credit.updateCredit(-cout)
-                shop.modeAchat = false
                 for (z in zombies) {
                     z.listeCase = cases
                 }
@@ -125,8 +121,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             "Plante_glace" -> {
                 cout = resources.getInteger(R.integer.prix_planteGlace)
                 plantes.add(Plante_glace(case, 75f, zombies, plantes))
-                credit.updateCredit(-cout)
-                shop.modeAchat = false
                 for (z in zombies) {
                     z.listeCase = cases
                 }
@@ -134,8 +128,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             "Noix" -> {
                 cout = resources.getInteger(R.integer.prix_noix)
                 plantes.add(Noix(case, 75f))
-                credit.updateCredit(-cout)
-                shop.modeAchat = false
                 for (z in zombies) {
                     z.listeCase = cases
                 }
@@ -143,13 +135,14 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             "Buche" -> {
                 cout = resources.getInteger(R.integer.prix_buche)
                 plantes.add(Buche(case, 75f))
-                credit.updateCredit(-cout)
-                shop.modeAchat = false
                 for (z in zombies) {
                     z.listeCase = cases
                 }
             }
         }
+        credit.updateCredit(-cout)
+        shop.modeAchat = false
+        shop.reset()
         case.plante = plantes.elementAt(plantes.size-1)
     }
 
@@ -163,8 +156,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
         largeurCase = 2*w/27.toFloat()
         longueurCase = h/6.toFloat()
-        distanceCaseX = w/3.toFloat()
-        distanceCaseY = h/2.toFloat()
+        distanceCaseX = 5*w/18.toFloat()
+        distanceCaseY = h/12.toFloat()+largeurCase
         for (i in 0..ncaseY-1){
             for (j in 0..ncaseX-1){
                 cases[i][j].pair = ((j+1)+i*ncaseX)%2
@@ -176,31 +169,32 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
         }
 
-        shop.x1 = w/6.toFloat()
-        shop.y1 = 0f
-        shop.x2 = shop.x1 + 6*largeurCase
-        shop.y2 = 1.5f*longueurCase
-        shop.planterad = shop.y2/3
-        shop.plantey = shop.y2/2
-        shop.tx = shop.x1+shop.planterad+15f
-        shop.pvx = shop.x1+shop.planterad+15f+largeurCase
-        shop.pgx = shop.x1+shop.planterad+15f+2*largeurCase
-        shop.nx = shop.x1+shop.planterad+15f+3*largeurCase
-        shop.bx = shop.x1+shop.planterad+15f+4*largeurCase
+        shop.plantelargeur = longueurCase
+        shop.plantelongueur = 1.8f*shop.plantelargeur
+        shop.x1 = 30f
+        shop.y1 = longueurCase
+        shop.x2 = shop.x1 + shop.plantelongueur
+        shop.y2 = h.toFloat()
+        shop.plantex = shop.x2/2
+        shop.ty = shop.y1
+        shop.pvy = shop.y1+shop.plantelargeur+15f
+        shop.pgy = shop.y1+2*(shop.plantelargeur+15f)
+        shop.ny = shop.y1+3*(shop.plantelargeur+15f)
+        shop.by = shop.y1+4*(shop.plantelargeur+15f)
         shop.set()
 
-        credit.x = shop.x1/2
-        credit.y = shop.y2/2
+        credit.x = shop.x2 + longueurCase
+        credit.y = 1.5f*longueurCase/2
         credit.rayon = largeurCase/2
         credit.set()
 
-        soleil.x = shop.x2 + shop.x1/2
-        soleil.y = shop.y2/2
+        soleil.x = credit.x + 2*longueurCase
+        soleil.y = credit.y
         soleil.rayon = largeurCase/2
         soleil.set()
 
         pelle.y = soleil.y
-        pelle.x = soleil.x + 3*largeurCase
+        pelle.x = soleil.x + 8*largeurCase
         pelle.rayon = largeurCase/2
         pelle.set()
 
@@ -238,8 +232,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
 
             if(currentTime - spawnt0 > periodeSpawnZombie*1000){
-                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this))
-                else zombies.add(Zombie_cone(Random.nextInt(0,3), 100f, cases, this))
+                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,ncaseY), 75f, cases, this))
+                else zombies.add(Zombie_cone(Random.nextInt(0,ncaseY), 100f, cases, this))
                 spawnt0 = currentTime
             }
 
@@ -293,6 +287,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         zombies = ArrayList<Zombie>()
         credit.reset()
         soleil.reset()
+        pelle.reset()
         for (i in 0..ncaseY-1){
             for (j in 0..ncaseX-1){
                 cases[i][j].reset()

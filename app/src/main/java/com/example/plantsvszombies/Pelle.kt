@@ -9,6 +9,7 @@ import androidx.core.graphics.toRect
 class Pelle(var x : Float, var y: Float, var rayon: Float) {
     val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
     var sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.pelle)
+    val sprite_click = BitmapFactory.decodeResource(App.instance.resources, R.drawable.pelle_clicked)
     var destruction = false
 
     fun onTouch(e : MotionEvent){
@@ -21,9 +22,14 @@ class Pelle(var x : Float, var y: Float, var rayon: Float) {
     }
 
     fun draw(canvas: Canvas){
-        canvas.drawBitmap(sprite, null, r.toRect(), null)
+        if(!destruction) canvas.drawBitmap(sprite, null, r.toRect(), null)
+        else canvas.drawBitmap(sprite_click, null, r.toRect(), null)
     }
     fun set(){
         r.set(x-rayon, y-rayon,x+rayon, y+rayon)
+    }
+
+    fun reset() {
+        destruction = false
     }
 }

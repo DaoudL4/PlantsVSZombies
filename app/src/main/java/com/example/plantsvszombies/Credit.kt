@@ -11,7 +11,7 @@ class Credit(var x : Float, var y: Float, var rayon: Float) {
     var police = 0
     val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
 
-    var credit = 0
+    var credit = 50
 
     fun draw(canvas : Canvas){
         paint.color = Color.GREEN

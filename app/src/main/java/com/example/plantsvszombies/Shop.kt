@@ -7,39 +7,40 @@ import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
 class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
-    var shopPaint = Paint()
     val r = RectF(x1, y1, x2, y2)
 
-    var plantey = 0f
-    var planterad = 0f
+    var plantex = 0f
+    var plantelargeur = 0f
+    var plantelongueur = 0f
 
-    var tx = 0f
-    val tr = RectF(tx-planterad,plantey-planterad,tx+planterad,plantey+planterad)
+    var ty = 0f
+    val tr = RectF(plantex-plantelongueur/2,ty-plantelargeur/2,plantex+plantelongueur/2,ty+plantelargeur/2)
     val prix_tournesol = App.instance.resources.getInteger(R.integer.prix_tournesol)
-    var tsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.shop_tournesol)
+    var tsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.tournesol_carte_shop)
 
-    var pvx = 0f
-    val pvr = RectF(pvx-planterad,plantey-planterad,pvx+planterad,plantey+planterad)
+    var pvy = 0f
+    val pvr = RectF(plantex-plantelongueur/2,pvy-plantelargeur/2,plantex+plantelongueur/2,pvy+plantelargeur/2)
     val prix_planteVerte = App.instance.resources.getInteger(R.integer.prix_planteVerte)
-    var pvsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sprite_verte_shop)
+    var pvsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.verte_carte_shop)
 
-    var pgx = 0f
-    val pgr = RectF(pgx-planterad,plantey-planterad,pgx+planterad,plantey+planterad)
+    var pgy = 0f
+    val pgr = RectF(plantex-plantelongueur/2,pgy-plantelargeur/2,plantex+plantelongueur/2,pgy+plantelargeur/2)
     val prix_planteGlace = App.instance.resources.getInteger(R.integer.prix_planteGlace)
-    var pgsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.plante_glace_shop)
+    var pgsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.glace_carte_shop)
 
-    var nx = 0f
-    val nr = RectF(nx-planterad,plantey-planterad,nx+planterad,plantey+planterad)
+    var ny = 0f
+    val nr = RectF(plantex-plantelongueur/2,ny-plantelargeur/2,plantex+plantelongueur/2,ny+plantelargeur/2)
     val prix_noix = App.instance.resources.getInteger(R.integer.prix_noix)
-    var nsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sprite_noix_shop)
+    var nsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.noix_carte_shop)
 
-    var bx = 0f
-    val br = RectF(bx-planterad,plantey-planterad,bx+planterad,plantey+planterad)
+    var by = 0f
+    val br = RectF(plantex-plantelongueur/2,by-plantelargeur/2,plantex+plantelongueur/2,by+plantelargeur/2)
     val prix_buche = App.instance.resources.getInteger(R.integer.prix_buche)
-    var bsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.buche_shop)
+    var bsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.buche_carte_shop)
 
     lateinit var plante_touchee : String
     var modeAchat = false
+
 
     fun onTouch(e : MotionEvent){
         val xtouch = e.rawX - 100
@@ -48,29 +49,37 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         if(tr.contains(xtouch, ytouch) && this.achetable("Tournesol")){
             plante_touchee = "Tournesol"
             modeAchat = true
+            reset()
+            tsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.tournesol_carte_shop_click)
         }
         if(pvr.contains(xtouch, ytouch) && this.achetable("Plante_verte")){
             plante_touchee = "Plante_verte"
             modeAchat = true
+            reset()
+            pvsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.verte_carte_shop_click)
         }
         if(pgr.contains(xtouch, ytouch) && this.achetable("Plante_glace")){
             plante_touchee = "Plante_glace"
             modeAchat = true
+            reset()
+            pgsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.glace_carte_shop_click)
         }
         if(nr.contains(xtouch, ytouch) && this.achetable("Noix")){
             plante_touchee = "Noix"
             modeAchat = true
+            reset()
+            nsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.noix_carte_shop_click)
         }
         if(br.contains(xtouch, ytouch) && this.achetable("Buche")){
             plante_touchee = "Buche"
             modeAchat = true
+            reset()
+            bsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.buche_carte_shop_click)
         }
 
     }
 
     fun draw(canvas : Canvas){
-        shopPaint.color = Color.BLUE
-        canvas.drawRect(r, shopPaint)
         canvas.drawBitmap(tsprite, null, tr.toRect(), null)
         canvas.drawBitmap(pvsprite, null, pvr.toRect(), null)
         canvas.drawBitmap(pgsprite, null, pgr.toRect(), null)
@@ -80,11 +89,11 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
 
     fun set(){
         r.set(x1, y1, x2, y2)
-        tr.set(tx-planterad,plantey-planterad,tx+planterad,plantey+planterad)
-        pvr.set(pvx-planterad,plantey-planterad,pvx+planterad,plantey+planterad)
-        pgr.set(pgx-planterad,plantey-planterad,pgx+planterad,plantey+planterad)
-        nr.set(nx-planterad,plantey-planterad,nx+planterad,plantey+planterad)
-        br.set(bx-planterad,plantey-planterad,bx+planterad,plantey+planterad)
+        tr.set(plantex-plantelongueur/2,ty-plantelargeur/2,plantex+plantelongueur/2,ty+plantelargeur/2)
+        pvr.set(plantex-plantelongueur/2,pvy-plantelargeur/2,plantex+plantelongueur/2,pvy+plantelargeur/2)
+        pgr.set(plantex-plantelongueur/2,pgy-plantelargeur/2,plantex+plantelongueur/2,pgy+plantelargeur/2)
+        nr.set(plantex-plantelongueur/2,ny-plantelargeur/2,plantex+plantelongueur/2,ny+plantelargeur/2)
+        br.set(plantex-plantelongueur/2,by-plantelargeur/2,plantex+plantelongueur/2,by+plantelargeur/2)
     }
 
     fun achetable(plante : String): Boolean {
@@ -99,6 +108,13 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
         }
 
         return achetable
+    }
+    fun reset() {
+         tsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.tournesol_carte_shop)
+         pvsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.verte_carte_shop)
+         pgsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.glace_carte_shop)
+         nsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.noix_carte_shop)
+         bsprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.buche_carte_shop)
     }
 }
 
