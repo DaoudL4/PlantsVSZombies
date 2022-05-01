@@ -5,13 +5,13 @@ import android.util.Log
 import androidx.core.graphics.toRect
 
 
-open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>>, val view: GameView) {
+open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>>, val view: GameView, val zombies: ArrayList<Zombie>, val indice : Int) {
     var case = listeCase[ligne][8]
     var posX = case.posX
     var posY = case.posY
     var estGele = false
     var vitesse =0.03
-    open var pv = 200
+    open var pv = 8
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var avance = true
 
@@ -67,5 +67,16 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
 
     fun gele() {
         estGele = true
+    }
+
+    fun prendDegats(degats: Int) {
+        pv-=degats
+        if(pv==0){
+            destruction()
+        }
+    }
+
+    private fun destruction() {
+        zombies.removeAll{it.indice == indice}
     }
 }

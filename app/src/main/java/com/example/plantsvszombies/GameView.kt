@@ -8,6 +8,7 @@ import android.content.res.Resources
 import android.graphics.*
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -15,11 +16,11 @@ import androidx.core.graphics.toRect
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import java.util.concurrent.ConcurrentLinkedQueue
+import kotlin.math.exp
 import kotlin.random.Random
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
     lateinit var canvas : Canvas
-    val background_bitmap = BitmapFactory.decodeResource(App.instance.resources, R.drawable.background)
     var drawing = false
     lateinit var thread : Thread
 
@@ -35,7 +36,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var soleil = Soleil(credit, 0f,0f,0f)
     var plantes = ConcurrentLinkedQueue<Plante>()
     var zombies = ArrayList<Zombie>()
-    val periodeSpawnZombie = 7
+    var periodeSpawnZombie = 0f
+    var t0 = 0L
     var spawnt0 = 0L
 
     var gameOver = false
@@ -43,6 +45,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
     init {
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
+        t0 = System.currentTimeMillis()
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean{
@@ -99,7 +102,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         when(plante){
             "Tournesol" -> {
                 cout = resources.getInteger(R.integer.prix_tournesol)
-                plantes.add(Tournesol(case, 75f, soleil))
+                plantes.add(Tournesol(case, 0f, soleil))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -108,7 +111,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
-                plantes.add(Plante_verte(case, 100f, zombies, plantes))
+                plantes.add(Plante_verte(case, 0f, zombies, plantes))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -117,7 +120,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_glace" -> {
                 cout = resources.getInteger(R.integer.prix_planteGlace)
-                plantes.add(Plante_glace(case, 75f, zombies, plantes))
+                plantes.add(Plante_glace(case, 0f, zombies, plantes))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -126,7 +129,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Noix" -> {
                 cout = resources.getInteger(R.integer.prix_noix)
-                plantes.add(Noix(case, 75f))
+                plantes.add(Noix(case, 0f))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -135,7 +138,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Buche" -> {
                 cout = resources.getInteger(R.integer.prix_buche)
-                plantes.add(Buche(case, 75f))
+                plantes.add(Buche(case, 0f))
                 credit.updateCredit(-cout)
                 shop.modeAchat = false
                 for (z in zombies) {
@@ -191,6 +194,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
 
         for(p in plantes){
+            p.rayon = largeurCase
             p.set()
         }
 
@@ -201,8 +205,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         while(drawing) {
             val currentTime = System.currentTimeMillis()
             val interval = (currentTime-previousTime).toDouble()
+            var t = (currentTime-t0).toDouble()
 
+            periodeSpawnZombie = (3 + 12*exp(-t/50000)).toFloat()
+            Log.d("tag", periodeSpawnZombie.toString())
             draw()
+
             for (z in zombies) {
                 z.avance(interval)
             }
@@ -212,8 +220,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
 
             if(currentTime - spawnt0 > periodeSpawnZombie*1000){
-                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this))
-                else zombies.add(Zombie_cone(Random.nextInt(0,3), 100f, cases, this))
+                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this, zombies,zombies.size-1))
+                else zombies.add(Zombie_cone(Random.nextInt(0,3), 100f, cases, this, zombies,zombies.size-1))
                 spawnt0 = currentTime
             }
 

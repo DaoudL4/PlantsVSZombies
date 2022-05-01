@@ -15,7 +15,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     lateinit var zombietouche: Zombie
     val vitesse = 1
-    val degats = 10
+    val degats = 1
 
     open fun launch(interval : Double) {
         r.offset((vitesse * interval).toFloat(), 0f)
@@ -43,6 +43,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
     }
 
     open fun quandToucheZombie() {
+        zombietouche.prendDegats(degats)
         destruction()
     }
 
