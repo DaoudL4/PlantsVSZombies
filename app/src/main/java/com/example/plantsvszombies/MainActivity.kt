@@ -1,5 +1,6 @@
 package com.example.plantsvszombies
 
+import android.graphics.PixelFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -11,6 +12,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         gameView = findViewById(R.id.gameView)
+        gameView.setZOrderOnTop(true)
+        gameView.holder.setFormat(PixelFormat.TRANSPARENT)
     }
 
     override fun onPause() {

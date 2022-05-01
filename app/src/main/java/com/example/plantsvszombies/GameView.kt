@@ -19,7 +19,7 @@ import kotlin.random.Random
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
     lateinit var canvas : Canvas
-    val backgroundPaint = Paint()
+    val background_bitmap = BitmapFactory.decodeResource(App.instance.resources, R.drawable.background)
     var drawing = false
     lateinit var thread : Thread
 
@@ -65,9 +65,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     fun draw(){
         if(holder.surface.isValid){
             canvas = holder.lockCanvas()
-            canvas.drawBitmap(BitmapFactory.decodeResource(App.instance.resources, R.drawable.background)
-            , null, RectF(0f, 0f, canvas.width.toFloat(),
-                    canvas.height.toFloat()).toRect(), null)
+            canvas.drawColor(0, PorterDuff.Mode.CLEAR)
 
 
             for (i in 0..ncaseY-1){
