@@ -14,6 +14,7 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
     open var pv = 8
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var avance = true
+    var mort = false
 
     open var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
     open var sprite_gele = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_gel)
@@ -72,11 +73,12 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
     fun prendDegats(degats: Int) {
         pv-=degats
         if(pv==0){
+            mort = true
             destruction()
         }
     }
 
     private fun destruction() {
-        zombies.removeAll{it.indice == indice}
+        zombies.removeAll{it.indice == indice && it.mort == true}
     }
 }

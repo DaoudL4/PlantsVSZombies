@@ -26,7 +26,7 @@ abstract class Plante_attaque(case: Case, rayon : Float, val zombies: ArrayList<
     }
 
     fun delBalle(indice : Int) {
-        balles.removeAll{it.indice == indice}
+        balles.removeAll{it.indice == indice && it.disparait == true}
     }
 
     override fun draw(canvas: Canvas){
