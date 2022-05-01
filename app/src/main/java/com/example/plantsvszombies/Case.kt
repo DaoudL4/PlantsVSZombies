@@ -10,6 +10,7 @@ class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur
     var paint = Paint()
     var occupe = false
     var pair = 0
+    lateinit var plante : Plante
 
     val case = RectF((posX-largeur/2), (posY-longueur/2),(posX+largeur/2),(posY+longueur/2))
 

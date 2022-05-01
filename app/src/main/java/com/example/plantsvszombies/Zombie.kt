@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.core.graphics.toRect
 
 
-open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>>, val view: GameView, val zombies: ArrayList<Zombie>, val indice : Int) {
+open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>>, val view: GameView) {
     var case = listeCase[ligne][8]
     var posX = case.posX
     var posY = case.posY
@@ -14,6 +14,8 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
     open var pv = 8
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var avance = true
+    lateinit var caseAttaque : Case
+    val degats = 1
     var mort = false
 
     open var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
@@ -36,7 +38,9 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
             else{
                 r.offset(-(vitesse/5 * interval).toFloat(), 0f)
             }
-
+        }
+        else{
+            attaque((degats*interval).toFloat())
         }
         /*
         if(depasse()){
@@ -44,6 +48,15 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
         }
 
          */
+    }
+
+    private fun attaque(degats : Float) {
+        try {
+            caseAttaque.plante.prendDegats(degats)
+        }catch (e : UninitializedPropertyAccessException){}finally {
+
+        }
+
     }
 
     fun set(){
@@ -56,7 +69,11 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
         for(i in listeCase[ligne]){
             if(i.case.contains(r.centerX(), r.centerY())){
                 if (i.occupe){
+                    caseAttaque = i
                     avance = false
+                }
+                else{
+                    avance = true
                 }
             }
         }
@@ -74,11 +91,6 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
         pv-=degats
         if(pv==0){
             mort = true
-            destruction()
         }
-    }
-
-    private fun destruction() {
-        zombies.removeAll{it.indice == indice && it.mort == true}
     }
 }

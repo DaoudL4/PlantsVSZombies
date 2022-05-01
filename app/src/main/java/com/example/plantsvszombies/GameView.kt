@@ -146,6 +146,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                 }
             }
         }
+        case.plante = plantes.elementAt(plantes.size-1)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -204,7 +205,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         while(drawing) {
             val currentTime = System.currentTimeMillis()
             val interval = (currentTime-previousTime).toDouble()
-            var t = (currentTime-t0).toDouble()
+            val t = (currentTime-t0).toDouble()
+
+            zombies.removeAll{it.mort == true}
+            plantes.removeAll{it.mort == true}
+
+            for (i in plantes) Log.d("tag", i.pv.toString())
 
             periodeSpawnZombie = (3 + 12*exp(-t/50000)).toFloat()
 
@@ -219,8 +225,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
 
             if(currentTime - spawnt0 > periodeSpawnZombie*1000){
-                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this, zombies,zombies.size-1))
-                else zombies.add(Zombie_cone(Random.nextInt(0,3), 100f, cases, this, zombies,zombies.size-1))
+                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,3), 75f, cases, this))
+                else zombies.add(Zombie_cone(Random.nextInt(0,3), 100f, cases, this))
                 spawnt0 = currentTime
             }
 

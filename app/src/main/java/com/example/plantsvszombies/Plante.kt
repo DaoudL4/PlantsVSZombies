@@ -9,8 +9,10 @@ abstract class Plante(val case : Case, var rayon : Float) {
     var posX = case.posX
     var posY = case.posY
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
+    var mort = false
 
     open val recharge = 100
+    abstract var pv : Float
     abstract val sprite : Bitmap
 
     open fun draw(canvas : Canvas){canvas.drawBitmap(sprite, null, r.toRect(), null)}
@@ -20,4 +22,13 @@ abstract class Plante(val case : Case, var rayon : Float) {
         posY = case.posY
         r.set(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     }
+
+    fun prendDegats(degats: Float){
+        pv-=degats
+        if(pv<=0){
+            mort = true
+            case.occupe = false
+        }
+    }
+
 }

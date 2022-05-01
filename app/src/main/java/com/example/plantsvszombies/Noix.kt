@@ -6,4 +6,5 @@ class Noix(case: Case, rayon: Float) : Plante(case, rayon) {
     override val sprite = BitmapFactory.decodeResource(App.instance.resources,
         R.drawable.sprite_noix
     )
+    override var pv = 40000f
 }
