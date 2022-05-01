@@ -25,9 +25,16 @@ class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur
         val xtouch = e.rawX - 100
         val ytouch = e.rawY - 100
 
-        if(case.contains(xtouch, ytouch) && !occupe){
-            occupe = true
-            view.achatPlante( this)
+        if(case.contains(xtouch, ytouch)){
+            if(!occupe){
+                occupe = true
+                view.achatPlante( this)
+            }
+            else {
+                occupe = false
+                view.detruitPlante(this)
+            }
+
         }
     }
 
@@ -35,5 +42,8 @@ class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur
         case.set((posX-largeur/2), (posY-longueur/2),(posX+largeur/2),(posY+longueur/2))
     }
 
+    fun reset(){
+        occupe = false
+    }
 
 }

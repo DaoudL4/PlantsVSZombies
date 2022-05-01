@@ -15,7 +15,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     lateinit var zombietouche: Zombie
     val vitesse = 1
-    val degats = 1
+    var degats = 1
     var disparait = false
 
     open fun launch(interval : Double) {
@@ -31,6 +31,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
 
     open fun enflamme() {
         sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.balle_feu)
+        degats = 2
     }
 
     fun toucheBuche(): Boolean {

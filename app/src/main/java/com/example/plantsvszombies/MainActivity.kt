@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
         gameView = findViewById(R.id.gameView)
         gameView.setZOrderOnTop(true)
         gameView.holder.setFormat(PixelFormat.TRANSPARENT)
+
     }
 
     override fun onPause() {

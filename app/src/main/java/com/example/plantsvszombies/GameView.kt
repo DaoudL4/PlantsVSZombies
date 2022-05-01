@@ -34,6 +34,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var credit = Credit(0f,0f,0f)
     var shop = Shop(credit, 0f, 0f, 0f, 0f)
     var soleil = Soleil(credit, 0f,0f,0f)
+    var pelle = Pelle(0f,0f,0f)
     var plantes = ConcurrentLinkedQueue<Plante>()
     var zombies = ArrayList<Zombie>()
     var periodeSpawnZombie = 0f
@@ -52,8 +53,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         if(e.action == MotionEvent.ACTION_DOWN){
             soleil.onTouch(e)
             shop.onTouch(e)
+            pelle.onTouch(e)
 
-            if(shop.modeAchat) {
+            if(shop.modeAchat || pelle.destruction) {
                 for (i in 0..ncaseY - 1) {
                     for (j in 0..ncaseX - 1) {
                         cases[i][j].onTouch(e)
@@ -88,6 +90,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             shop.draw(canvas)
             credit.draw(canvas)
             soleil.draw(canvas)
+            pelle.draw(canvas)
             for (z in zombies) {
                 z.draw(canvas)
             }
@@ -149,6 +152,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         case.plante = plantes.elementAt(plantes.size-1)
     }
 
+    fun detruitPlante(case: Case) {
+        plantes.removeAll{it.case == case}
+        pelle.destruction = false
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
@@ -190,6 +198,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         soleil.rayon = largeurCase/2
         soleil.set()
 
+        pelle.y = soleil.y
+        pelle.x = soleil.x + 3*largeurCase
+        pelle.rayon = largeurCase/2
+        pelle.set()
+
         for (z in zombies) {
             z.set()
         }
@@ -210,7 +223,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             zombies.removeAll{it.mort == true}
             plantes.removeAll{it.mort == true}
 
-            for (i in plantes) Log.d("tag", i.pv.toString())
 
             periodeSpawnZombie = (3 + 12*exp(-t/50000)).toFloat()
 
@@ -272,9 +284,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         TODO("Not yet implemented")
     }
 
-    /*
+
+
     fun newGame(){
-        plantes = ArrayList<Plante>()
+        plantes = ConcurrentLinkedQueue<Plante>()
+        zombies = ArrayList<Zombie>()
         credit.reset()
         soleil.reset()
         for (i in 0..ncaseY-1){
@@ -336,5 +350,5 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         gameOver = true
     }
 
-     */
+
 }

@@ -42,12 +42,12 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
         else{
             attaque((degats*interval).toFloat())
         }
-        /*
+
         if(depasse()){
             view.gameOver_lose()
         }
 
-         */
+
     }
 
     private fun attaque(degats : Float) {
