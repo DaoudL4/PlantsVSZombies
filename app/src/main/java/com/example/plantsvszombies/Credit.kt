@@ -31,6 +31,6 @@ class Credit(var x : Float, var y: Float, var rayon: Float) {
     }
 
     fun reset(){
-        credit = 0
+        credit = 50
     }
 }

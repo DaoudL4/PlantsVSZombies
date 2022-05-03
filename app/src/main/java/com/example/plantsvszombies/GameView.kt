@@ -37,9 +37,10 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var pelle = Pelle(0f,0f,0f)
     var plantes = ConcurrentLinkedQueue<Plante>()
     var zombies = ArrayList<Zombie>()
-    var periodeSpawnZombie = 0f
+    var barreProgression = BarreProgression(0f,0f,0f,0f)
+    var spawn = SpawnZombie(this)
+
     var t0 = 0L
-    var spawnt0 = 0L
     val tempsPartie = 120
 
     var gameOver = false
@@ -95,13 +96,14 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             for (z in zombies) {
                 z.draw(canvas)
             }
+            barreProgression.draw(canvas)
 
             holder.unlockCanvasAndPost(canvas)
         }
     }
 
     fun achatPlante(case: Case) {
-        val plante = shop.plante_touchee
+        val plante = shop.plante_touchee.nom
         var cout = 0
         when(plante){
             "Tournesol" -> {
@@ -125,6 +127,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                 plantes.add(Buche(case, 75f))
             }
         }
+        shop.plante_touchee.actif = false
+        shop.plante_touchee.resetTimer()
 
         for (z in zombies) {
             z.listeCase = cases
@@ -170,15 +174,15 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
         shop.set()
 
-        credit.x = shop.x2 + longueurCase
-        credit.y = 1.5f*longueurCase/2
-        credit.rayon = largeurCase/2
-        credit.set()
-
-        soleil.x = credit.x + 2*longueurCase
-        soleil.y = credit.y
+        soleil.x = shop.x2 + longueurCase
+        soleil.y = 1.5f*longueurCase/2
         soleil.rayon = largeurCase/2
         soleil.set()
+
+        credit.x = soleil.x
+        credit.y = soleil.y + w/9
+        credit.rayon = largeurCase/2
+        credit.set()
 
         pelle.y = soleil.y
         pelle.x = soleil.x + 8*largeurCase
@@ -193,6 +197,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             p.set()
         }
 
+        barreProgression.x = w/2.toFloat()
+        barreProgression.y = h/12.toFloat()
+        barreProgression.longueur = 4*largeurCase
+        barreProgression.largeur = largeurCase/3
+        barreProgression.set()
+
     }
 
     override fun run() {
@@ -205,24 +215,15 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             zombies.removeAll{it.mort == true}
             plantes.removeAll{it.mort == true}
 
-
-            periodeSpawnZombie = (3 + 12*exp(-t/50000)).toFloat()
-
             draw()
 
             soleil.timer(currentTime)
             for(elt in shop.elements){elt.timer(currentTime)}
+            spawn.setPeriode(t)
+            spawn.timer(currentTime)
 
             for (z in zombies) {
                 z.avance(interval)
-            }
-
-
-
-            if(currentTime - spawnt0 > periodeSpawnZombie*1000){
-                if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,ncaseY), 75f, cases, this))
-                else zombies.add(Zombie_cone(Random.nextInt(0,ncaseY), 100f, cases, this))
-                spawnt0 = currentTime
             }
 
             for (p in plantes) {
@@ -239,6 +240,10 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                     }
                 }
             }
+
+            barreProgression.progression = (t/(1000*tempsPartie)).toFloat()
+            barreProgression.set()
+
             previousTime = currentTime
 
             if(t >= tempsPartie*1000) gameOver_win()
@@ -282,7 +287,8 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
         }
         t0 = System.currentTimeMillis()
-        spawnt0 = t0
+        spawn.resetTimer()
+        for(elt in shop.elements){elt.resetTimer()}
 
         drawing = true
         if(gameOver){

@@ -24,10 +24,8 @@ class ShopElement(var shop : Shop, var x: Float, var y : Float, var plantelongue
     }
 
     fun onTouch(xtouch : Float, ytouch : Float){
-        if(r.contains(xtouch, ytouch) && shop.achetable(cout)){
-            shop.achat(nom)
-            resetTimer()
-            actif = false
+        if(r.contains(xtouch, ytouch) && actif){
+            shop.achat(this)
         }
     }
 

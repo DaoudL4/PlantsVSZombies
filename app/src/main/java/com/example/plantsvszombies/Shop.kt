@@ -15,7 +15,7 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
 
     var elements = ArrayList<ShopElement>()
 
-    lateinit var plante_touchee : String
+    lateinit var plante_touchee : ShopElement
     var modeAchat = false
 
     init {
@@ -37,8 +37,8 @@ class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, va
 
     }
 
-    fun achat(nom: String) {
-        plante_touchee = nom
+    fun achat(element: ShopElement) {
+        plante_touchee = element
         modeAchat = true
     }
 
