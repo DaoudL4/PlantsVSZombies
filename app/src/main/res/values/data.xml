@@ -5,4 +5,9 @@
     <integer name="prix_planteGlace">125</integer>
     <integer name="prix_noix">50</integer>
     <integer name="prix_buche">175</integer>
+    <integer name="periode_tournesol">2</integer>
+    <integer name="periode_planteVerte">2</integer>
+    <integer name="periode_planteGlace">2</integer>
+    <integer name="periode_noix">2</integer>
+    <integer name="periode_buche">2</integer>
 </resources>

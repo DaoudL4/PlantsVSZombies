@@ -40,7 +40,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     var periodeSpawnZombie = 0f
     var t0 = 0L
     var spawnt0 = 0L
-    val tempsPartie = 60
+    val tempsPartie = 120
 
     var gameOver = false
     val activity = context as FragmentActivity
@@ -107,42 +107,30 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             "Tournesol" -> {
                 cout = resources.getInteger(R.integer.prix_tournesol)
                 plantes.add(Tournesol(case, 75f, soleil))
-                for (z in zombies) {
-                    z.listeCase = cases
-                }
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
                 plantes.add(Plante_verte(case, 75f, zombies, plantes))
-                for (z in zombies) {
-                    z.listeCase = cases
-                }
             }
             "Plante_glace" -> {
                 cout = resources.getInteger(R.integer.prix_planteGlace)
                 plantes.add(Plante_glace(case, 75f, zombies, plantes))
-                for (z in zombies) {
-                    z.listeCase = cases
-                }
             }
             "Noix" -> {
                 cout = resources.getInteger(R.integer.prix_noix)
                 plantes.add(Noix(case, 75f))
-                for (z in zombies) {
-                    z.listeCase = cases
-                }
             }
             "Buche" -> {
                 cout = resources.getInteger(R.integer.prix_buche)
                 plantes.add(Buche(case, 75f))
-                for (z in zombies) {
-                    z.listeCase = cases
-                }
             }
+        }
+
+        for (z in zombies) {
+            z.listeCase = cases
         }
         credit.updateCredit(-cout)
         shop.modeAchat = false
-        shop.reset()
         case.plante = plantes.elementAt(plantes.size-1)
     }
 
@@ -176,11 +164,10 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         shop.x2 = shop.x1 + shop.plantelongueur
         shop.y2 = h.toFloat()
         shop.plantex = shop.x2/2
-        shop.ty = shop.y1
-        shop.pvy = shop.y1+shop.plantelargeur+15f
-        shop.pgy = shop.y1+2*(shop.plantelargeur+15f)
-        shop.ny = shop.y1+3*(shop.plantelargeur+15f)
-        shop.by = shop.y1+4*(shop.plantelargeur+15f)
+
+        for(i in 0..shop.elements.size-1){
+            shop.elements[i].y = shop.y1 + i*(shop.plantelargeur+15f)
+        }
         shop.set()
 
         credit.x = shop.x2 + longueurCase
@@ -223,13 +210,14 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
             draw()
 
+            soleil.timer(currentTime)
+            for(elt in shop.elements){elt.timer(currentTime)}
+
             for (z in zombies) {
                 z.avance(interval)
             }
 
-            if(!soleil.etat && currentTime - soleil.t0 > soleil.periode*1000){
-                soleil.changeEtat()
-            }
+
 
             if(currentTime - spawnt0 > periodeSpawnZombie*1000){
                 if(Random.nextInt(0,100)<80) zombies.add(Zombie(Random.nextInt(0,ncaseY), 75f, cases, this))

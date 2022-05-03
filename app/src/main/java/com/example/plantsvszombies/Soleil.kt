@@ -4,9 +4,10 @@ import android.graphics.*
 import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
-class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float){
-    var periode = 0f
-    var t0 = 0L
+class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) : Timer{
+    override var periodeTimer = 5f
+    override var t0Timer = 0L
+
     var etat = true
     val increment = 50
 
@@ -22,7 +23,13 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float){
 
         if(r.contains(xtouch, ytouch) && etat){
             incrementer()
-            t0 = System.currentTimeMillis()
+            resetTimer()
+            changeEtat()
+        }
+    }
+
+    override fun actionTimer() {
+        if(!etat){
             changeEtat()
         }
     }
@@ -43,7 +50,7 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float){
     }
 
     fun changeFreq(coefficient : Float){
-        periode/=coefficient
+        periodeTimer/=coefficient
     }
 
     fun set(){
@@ -51,8 +58,8 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float){
     }
 
     fun reset(){
-        t0 = System.currentTimeMillis()
-        periode = 5f
+        t0Timer = System.currentTimeMillis()
+        periodeTimer = 5f
     }
 
 }

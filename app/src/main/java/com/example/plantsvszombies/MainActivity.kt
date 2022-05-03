@@ -3,6 +3,7 @@ package com.example.plantsvszombies
 import android.graphics.PixelFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 
 class MainActivity : AppCompatActivity() {
     lateinit var gameView: GameView
