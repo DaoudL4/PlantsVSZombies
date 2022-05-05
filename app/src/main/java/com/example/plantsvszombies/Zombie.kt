@@ -1,11 +1,10 @@
 package com.example.plantsvszombies
 
 import android.graphics.*
-import android.util.Log
 import androidx.core.graphics.toRect
 
 
-open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<Case>>, val view: GameView) {
+open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array<Case>>, val view: GameView) {
     var case = listeCase[ligne][8]
     var posX = case.posX
     var posY = case.posY
@@ -15,11 +14,14 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var avance = true
     lateinit var caseAttaque : Case
-    val degats = 1
+    open val degats = 1
     var mort = false
 
     open var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
-    open var sprite_gele = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_gel)
+    open var sprite_gele = BitmapFactory.decodeResource(
+        App.instance.resources,
+        R.drawable.zombie_gel
+    )
 
 
 
@@ -68,7 +70,7 @@ open class Zombie(var ligne: Int, var rayon : Float,var listeCase : Array<Array<
     fun currentCase(){
         for(i in listeCase[ligne]){
             if(i.case.contains(r.centerX(), r.centerY())){
-                if (i.occupe){
+                if (i.occupe && i.plante !is ZombieMain){
                     caseAttaque = i
                     avance = false
                 }

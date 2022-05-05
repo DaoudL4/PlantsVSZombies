@@ -1,9 +1,6 @@
 package com.example.plantsvszombies
 
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
-import android.graphics.RectF
-import androidx.core.graphics.toRect
 import java.util.concurrent.ConcurrentLinkedQueue
 
 abstract class Plante_attaque(case: Case, rayon : Float, val zombies: ArrayList<Zombie>, val plantes: ConcurrentLinkedQueue<Plante>) : Plante(case, rayon) {

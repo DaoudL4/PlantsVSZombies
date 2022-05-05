@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.res.Resources
 import android.graphics.*
 import android.os.Bundle
 import android.util.AttributeSet
@@ -12,17 +11,16 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import androidx.core.graphics.toRect
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import java.util.concurrent.ConcurrentLinkedQueue
-import kotlin.math.exp
-import kotlin.random.Random
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
     lateinit var canvas : Canvas
     var drawing = false
     lateinit var thread : Thread
+
+    var level = 0
 
     var cases : Array<Array<Case>>
     val ncaseY = 5
@@ -49,6 +47,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     init {
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
         t0 = System.currentTimeMillis()
+
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean{
@@ -144,8 +143,17 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         pelle.destruction = false
     }
 
+    fun spawnMain(case : Case){
+        plantes.add(ZombieMain(case, 50f))
+        case.plante = plantes.elementAt(plantes.size-1)
+        case.occupe = true
+    }
+
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        spawn.level = level
+        spawn.setLevel()
 
         largeurCase = 2*w/27.toFloat()
         longueurCase = h/6.toFloat()
@@ -230,6 +238,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
             for (z in zombies) {
                 z.avance(interval)
+                if(z is Zombie_magicien) z.timer(currentTime)
             }
 
             for (p in plantes) {

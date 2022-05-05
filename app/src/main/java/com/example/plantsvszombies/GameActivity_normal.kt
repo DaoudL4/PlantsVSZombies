@@ -4,7 +4,7 @@ import android.graphics.PixelFormat
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-class GameActivity: AppCompatActivity() {
+class GameActivity_normal: AppCompatActivity() {
     lateinit var gameView: GameView
 
 
@@ -12,6 +12,7 @@ class GameActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         gameView = findViewById(R.id.gameView)
+        gameView.level = 1
         gameView.setZOrderOnTop(true)
         gameView.holder.setFormat(PixelFormat.TRANSPARENT)
 

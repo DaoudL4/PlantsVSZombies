@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
 import androidx.core.graphics.toRect
+import com.example.plantsvszombies.Case
 
 abstract class Plante(val case : Case, var rayon : Float) {
     var posX = case.posX
