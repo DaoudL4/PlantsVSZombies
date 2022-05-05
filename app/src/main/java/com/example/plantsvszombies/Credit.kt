@@ -9,21 +9,21 @@ class Credit(var x : Float, var y: Float, var rayon: Float) {
     var paint = Paint()
     var textpaint = Paint()
     var police = 0
-    val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
+    val r = RectF(x-rayon, y-rayon/2,x+rayon, y+rayon/2)
 
     var credit = 50
 
     fun draw(canvas : Canvas){
-        paint.color = Color.GREEN
+        paint.color = Color.argb(150, 0, 0 , 0)
         textpaint.color = Color.WHITE
         textpaint.textSize = 50f
         textpaint.textAlign = Paint.Align.CENTER
-        canvas.drawOval(r, paint)
-        canvas.drawText(credit.toString(), x, y, textpaint)
+        canvas.drawRect(r, paint)
+        canvas.drawText(credit.toString(), x, y - ((textpaint.descent() + textpaint.ascent()) / 2), textpaint)
     }
 
     fun set(){
-        r.set(x-rayon, y-rayon,x+rayon, y+rayon)
+        r.set(x-rayon, y-rayon/2,x+rayon, y+rayon/2)
     }
 
     fun updateCredit(montant : Int) {

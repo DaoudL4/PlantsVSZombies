@@ -11,6 +11,6 @@ interface Timer {
         }
     }
     fun resetTimer(){
-        t0Timer = System.currentTimeMillis()
+        t0Timer = System.currentTimeMillis() 
     }
 }

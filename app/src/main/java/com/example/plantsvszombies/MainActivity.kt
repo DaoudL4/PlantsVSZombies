@@ -1,30 +1,22 @@
 package com.example.plantsvszombies
 
+import android.content.Intent
 import android.graphics.PixelFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
-    lateinit var gameView: GameView
-
+    lateinit var playButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        gameView = findViewById(R.id.gameView)
-        gameView.setZOrderOnTop(true)
-        gameView.holder.setFormat(PixelFormat.TRANSPARENT)
+        setContentView(R.layout.main_menu)
+        playButton = findViewById(R.id.button)
 
-    }
-
-    override fun onPause() {
-        super.onPause()
-        gameView.pause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        gameView.resume()
+        playButton.setOnClickListener{
+            startActivity(Intent(this@MainActivity, GameActivity::class.java))
+        }
     }
 }

@@ -53,7 +53,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
     fun toucheZombie() : Boolean{
         var res = false
         for (z in zombies){
-            if(z.r.contains(r.centerX(), r.centerY())){
+            if(r.contains(z.r.centerX(), z.r.centerY())){
                 res = true
                 zombietouche = z
             }

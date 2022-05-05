@@ -129,6 +129,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
         shop.plante_touchee.actif = false
         shop.plante_touchee.resetTimer()
+        shop.resetSelect()
 
         for (z in zombies) {
             z.listeCase = cases
@@ -174,20 +175,21 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
         shop.set()
 
-        soleil.x = shop.x2 + longueurCase
+        soleil.x = shop.x2 + w/20
         soleil.y = 1.5f*longueurCase/2
         soleil.rayon = largeurCase/2
         soleil.set()
 
         credit.x = soleil.x
-        credit.y = soleil.y + w/9
+        credit.y = soleil.y + h/7
         credit.rayon = largeurCase/2
         credit.set()
 
         pelle.y = soleil.y
-        pelle.x = soleil.x + 8*largeurCase
+        pelle.x = soleil.x + 9 *largeurCase
         pelle.rayon = largeurCase/2
         pelle.set()
+
 
         for (z in zombies) {
             z.set()
@@ -218,7 +220,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             draw()
 
             soleil.timer(currentTime)
-            for(elt in shop.elements){elt.timer(currentTime)}
+            for(elt in shop.elements){
+                elt.timer(currentTime)
+                elt.setProgression()
+                elt.set()
+            }
             spawn.setPeriode(t)
             spawn.timer(currentTime)
 
