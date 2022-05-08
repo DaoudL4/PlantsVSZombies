@@ -1,10 +1,7 @@
 package com.example.plantsvszombies
 
-import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.view.MotionEvent
-import androidx.core.graphics.toRect
 
 class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
     val r = RectF(x1, y1, x2, y2)

@@ -5,7 +5,7 @@ import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
 class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) : Timer{
-    override var periodeTimer = 1f
+    override var periodeTimer = 5f
     override var t0Timer = 0L
 
     var etat = true

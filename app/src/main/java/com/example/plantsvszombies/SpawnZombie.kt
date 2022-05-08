@@ -1,6 +1,5 @@
 package com.example.plantsvszombies
 
-import android.util.Log
 import kotlin.math.exp
 import kotlin.random.Random
 
@@ -16,9 +15,9 @@ class SpawnZombie(val view : GameView) : Timer{
 
     override fun actionTimer() {
         val tirage = Random.nextInt(0,100)
-        if(tirage<70) view.zombies.add(Zombie(Random.nextInt(0,view.ncaseY), 200f, view.cases, view))
-        else if (tirage > 97)view.zombies.add(Zombie_magicien(Random.nextInt(0,view.ncaseY), 200f, view.cases, view))
-        else view.zombies.add(Zombie_cone(Random.nextInt(0,view.ncaseY), 200f, view.cases, view))
+        if(tirage<70) view.zombies.add(Zombie(Random.nextInt(0,view.ncaseY), 100f, view.cases, view))
+        else if (tirage > 97) view.zombies.add(Zombie_mage(Random.nextInt(0,view.ncaseY), 100f, view.cases, view))
+        else view.zombies.add(Zombie_cone(Random.nextInt(0,view.ncaseY), 100f, view.cases, view))
         resetTimer()
     }
 
@@ -29,9 +28,9 @@ class SpawnZombie(val view : GameView) : Timer{
     fun setLevel(){
         when(level){
             0 -> {
-                a = 3
-                b = 12
-                c = 50
+                a = 5
+                b = 15
+                c = 60
             }
             1 -> {
                 a = 3
@@ -39,9 +38,9 @@ class SpawnZombie(val view : GameView) : Timer{
                 c = 50
             }
             2 -> {
-                a = 0
-                b = 1
-                c = 1
+                a = 1
+                b = 13
+                c = 50
             }
         }
     }

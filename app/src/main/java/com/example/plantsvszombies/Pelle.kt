@@ -13,8 +13,8 @@ class Pelle(var x : Float, var y: Float, var rayon: Float) {
     var destruction = false
 
     fun onTouch(e : MotionEvent){
-        val xtouch = e.rawX - 100
-        val ytouch = e.rawY - 100
+        val xtouch = e.rawX - 20
+        val ytouch = e.rawY - 20
 
         if(r.contains(xtouch, ytouch)){
             destruction = true

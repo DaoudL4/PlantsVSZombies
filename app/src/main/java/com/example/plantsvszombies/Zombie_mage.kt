@@ -1,10 +1,9 @@
 package com.example.plantsvszombies
 
 import android.graphics.BitmapFactory
-import com.example.plantsvszombies.*
 import kotlin.random.Random
 
-class Zombie_magicien(ligne: Int, rayon : Float, listeCase : Array<Array<Case>>, view: GameView) : Zombie(ligne, rayon, listeCase, view), Timer {
+class Zombie_mage(ligne: Int, rayon : Float, listeCase : Array<Array<Case>>, view: GameView) : Zombie(ligne, rayon, listeCase, view), Timer {
     override var pv = 5
     override val degats = 0
     override var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_mage)

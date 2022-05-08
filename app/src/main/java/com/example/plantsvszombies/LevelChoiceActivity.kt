@@ -18,13 +18,19 @@ class LevelChoiceActivity : AppCompatActivity() {
         level3Button = findViewById(R.id.button3)
 
         level1Button.setOnClickListener{
-            startActivity(Intent(this@LevelChoiceActivity, GameActivity_simple::class.java))
+            val intent = Intent(this@LevelChoiceActivity, GameActivity::class.java)
+            intent.putExtra("level", 0)
+            startActivity(intent)
         }
         level2Button.setOnClickListener{
-            startActivity(Intent(this@LevelChoiceActivity, GameActivity_normal::class.java))
+            val intent = Intent(this@LevelChoiceActivity, GameActivity::class.java)
+            intent.putExtra("level", 1)
+            startActivity(intent)
         }
         level3Button.setOnClickListener{
-            startActivity(Intent(this@LevelChoiceActivity, GameActivity_difficile::class.java))
+            val intent = Intent(this@LevelChoiceActivity, GameActivity::class.java)
+            intent.putExtra("level", 2)
+            startActivity(intent)
         }
     }
 }

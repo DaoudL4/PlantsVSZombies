@@ -1,17 +1,13 @@
 package com.example.plantsvszombies
 
-import android.app.AlertDialog
-import android.app.Dialog
+
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.*
-import android.os.Bundle
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import androidx.fragment.app.DialogFragment
+import android.view.View
 import androidx.fragment.app.FragmentActivity
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -45,6 +41,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     val activity = context as FragmentActivity
 
     init {
+        this.visibility = View.VISIBLE
+        spawn.level = level
+        spawn.setLevel()
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
         t0 = System.currentTimeMillis()
 
@@ -107,35 +106,36 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         when(plante){
             "Tournesol" -> {
                 cout = resources.getInteger(R.integer.prix_tournesol)
-                plantes.add(Tournesol(case, 75f, soleil))
+                plantes.add(Tournesol(case, 50f, soleil))
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
-                plantes.add(Plante_verte(case, 75f, zombies, plantes))
+                plantes.add(Plante_verte(case, 50f, zombies, plantes))
             }
             "Plante_glace" -> {
                 cout = resources.getInteger(R.integer.prix_planteGlace)
-                plantes.add(Plante_glace(case, 75f, zombies, plantes))
+                plantes.add(Plante_glace(case, 50f, zombies, plantes))
             }
             "Noix" -> {
                 cout = resources.getInteger(R.integer.prix_noix)
-                plantes.add(Noix(case, 75f))
+                plantes.add(Noix(case, 50f))
             }
             "Buche" -> {
                 cout = resources.getInteger(R.integer.prix_buche)
-                plantes.add(Buche(case, 75f))
+                plantes.add(Buche(case, 50f))
             }
         }
         shop.plante_touchee.actif = false
         shop.plante_touchee.resetTimer()
         shop.resetSelect()
 
+        case.plante = plantes.elementAt(plantes.size-1)
+
         for (z in zombies) {
             z.listeCase = cases
         }
         credit.updateCredit(-cout)
         shop.modeAchat = false
-        case.plante = plantes.elementAt(plantes.size-1)
     }
 
     fun detruitPlante(case: Case) {
@@ -152,8 +152,6 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        spawn.level = level
-        spawn.setLevel()
 
         largeurCase = 2*w/27.toFloat()
         longueurCase = h/6.toFloat()
@@ -200,6 +198,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
 
         for (z in zombies) {
+            z.rayon = h/10.toFloat()
             z.set()
         }
 
@@ -238,7 +237,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
             for (z in zombies) {
                 z.avance(interval)
-                if(z is Zombie_magicien) z.timer(currentTime)
+                if(z is Zombie_mage) z.timer(currentTime)
             }
 
             for (p in plantes) {
@@ -305,6 +304,9 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         spawn.resetTimer()
         for(elt in shop.elements){elt.resetTimer()}
 
+        this.visibility = View.VISIBLE
+
+
         drawing = true
         if(gameOver){
             gameOver = false
@@ -313,36 +315,17 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
     }
 
-    fun showGameOver(messageId: Int) {
-        class GameResult: DialogFragment() {
-            override fun onCreateDialog(bundle: Bundle?): Dialog {
-
-                val builder = AlertDialog.Builder(getActivity())
-                builder.setTitle(resources.getString(messageId))
-                builder.setMessage(
-                    resources.getString(
-                        R.string.results_format
-                    )
-                )
-                builder.setPositiveButton(R.string.reset_game,
-                    DialogInterface.OnClickListener { _, _->newGame()}
-                )
-                return builder.create()
-            }
-        }
-
+    fun showGameOver(messageId: String) {
         activity.runOnUiThread(
             Runnable {
+                val gameResult = GameOverFragment(messageId, this)
+
                 val ft = activity.supportFragmentManager.beginTransaction()
-                val prev =
-                    activity.supportFragmentManager.findFragmentByTag("dialog")
-                if (prev != null) {
-                    ft.remove(prev)
-                }
-                ft.addToBackStack(null)
-                val gameResult = GameResult()
-                gameResult.setCancelable(false)
-                gameResult.show(ft,"dialog")
+                ft.setReorderingAllowed(true)
+                ft.add(R.id.fragment_container, gameResult, "gameoverfragment")
+                this.visibility = View.INVISIBLE
+                ft.commit()
+
             }
         )
     }
@@ -350,12 +333,12 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     fun gameOver_win(){
         drawing = false
         gameOver = true
-        showGameOver(R.string.win)
+        showGameOver(resources.getString(R.string.win))
     }
     fun gameOver_lose(){
         drawing = false
         gameOver = true
-        showGameOver(R.string.lose)
+        showGameOver(resources.getString(R.string.lose))
     }
 
 

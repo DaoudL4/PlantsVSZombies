@@ -9,7 +9,7 @@ open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array
     var posX = case.posX
     var posY = case.posY
     var estGele = false
-    var vitesse =0.03
+    var vitesse = 0.03
     open var pv = 8
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var avance = true
@@ -22,8 +22,6 @@ open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array
         App.instance.resources,
         R.drawable.zombie_gel
     )
-
-
 
     fun draw(canvas : Canvas){
         if(!estGele) canvas.drawBitmap(sprite_normal, null, r.toRect(), null)
@@ -70,9 +68,18 @@ open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array
     fun currentCase(){
         for(i in listeCase[ligne]){
             if(i.case.contains(r.centerX(), r.centerY())){
-                if (i.occupe && i.plante !is ZombieMain){
-                    caseAttaque = i
-                    avance = false
+                if (i.occupe ){
+                    try{
+                        if(i.plante !is ZombieMain){
+                            caseAttaque = i
+                            avance = false
+                        }
+                    }catch (e : UninitializedPropertyAccessException){
+                        caseAttaque = i
+                        avance = false
+
+                        println("exception levee")
+                    }
                 }
                 else{
                     avance = true
@@ -92,7 +99,7 @@ open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array
 
     fun prendDegats(degats: Int) {
         pv-=degats
-        if(pv==0){
+        if(pv<=0){
             mort = true
         }
     }
