@@ -12,10 +12,10 @@ class Zombie_mage(ligne: Int, rayon : Float, listeCase : Array<Array<Case>>, vie
     override var t0Timer = System.currentTimeMillis()
     override var periodeTimer = 5f
 
-    var listeCaseOccupe = ArrayList<Case>()
+    private var listeCaseOccupe = ArrayList<Case>()
 
 
-    fun disparaitPlante(){
+    private fun disparaitPlante(){
         for (i in 0..view.ncaseY-1){
             for (j in 0..view.ncaseX-1){
                 if (listeCase[i][j].occupe) listeCaseOccupe.add(listeCase[i][j])

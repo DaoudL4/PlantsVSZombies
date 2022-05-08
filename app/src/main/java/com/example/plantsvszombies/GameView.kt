@@ -13,32 +13,32 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
     lateinit var canvas : Canvas
-    var drawing = false
-    lateinit var thread : Thread
+    private var drawing = false
+    private lateinit var thread : Thread
 
     var level = 0
-
     var cases : Array<Array<Case>>
     val ncaseY = 5
     val ncaseX = 9
-    var largeurCase = 0f
-    var longueurCase = 0f
-    var distanceCaseX = 0f
-    var distanceCaseY = 0f
-    var credit = Credit(0f,0f,0f)
-    var shop = Shop(credit, 0f, 0f, 0f, 0f)
-    var soleil = Soleil(credit, 0f,0f,0f)
-    var pelle = Pelle(0f,0f,0f)
+
+    private var largeurCase = 0f
+    private var longueurCase = 0f
+    private var distanceCaseX = 0f
+    private var distanceCaseY = 0f
+    private var credit = Credit(0f,0f,0f)
+    private var shop = Shop(credit, 0f, 0f, 0f, 0f)
+    private var soleil = Soleil(credit, 0f,0f,0f)
+    private var pelle = Pelle(0f,0f,0f)
     var plantes = ConcurrentLinkedQueue<Plante>()
     var zombies = ArrayList<Zombie>()
-    var barreProgression = BarreProgression(0f,0f,0f,0f)
-    var spawn = SpawnZombie(this)
+    private var barreProgression = BarreProgression(0f,0f,0f,0f)
+    private var spawn = SpawnZombie(this)
 
-    var t0 = 0L
-    val tempsPartie = 120
+    private var t0 = 0L
+    private val tempsPartie = 120
 
-    var gameOver = false
-    val activity = context as FragmentActivity
+    private var gameOver = false
+    private val activity = context as FragmentActivity
 
     init {
         this.visibility = View.VISIBLE
@@ -110,11 +110,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
             "Plante_verte" -> {
                 cout = resources.getInteger(R.integer.prix_planteVerte)
-                plantes.add(Plante_verte(case, 50f, zombies, plantes))
+                plantes.add(Plante_verte(case, 50f, this))
             }
             "Plante_glace" -> {
                 cout = resources.getInteger(R.integer.prix_planteGlace)
-                plantes.add(Plante_glace(case, 50f, zombies, plantes))
+                plantes.add(Plante_glace(case, 50f, this))
             }
             "Noix" -> {
                 cout = resources.getInteger(R.integer.prix_noix)
@@ -243,15 +243,11 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             for (p in plantes) {
                 if (p is Plante_verte){
                     p.avanceBalles(interval)
-                    if(currentTime - p.t0 > p.periode_tir*1000){
-                        p.tir()
-                    }
+                    p.timer(currentTime)
                 }
                 if (p is Plante_glace){
                     p.avanceBalles(interval)
-                    if(currentTime - p.t0 > p.periode_tir*1000){
-                        p.tir()
-                    }
+                    p.timer(currentTime)
                 }
             }
 
@@ -315,10 +311,10 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         }
     }
 
-    fun showGameOver(messageId: String) {
+    private fun showGameOver(message: String, imageId : Int) {
         activity.runOnUiThread(
             Runnable {
-                val gameResult = GameOverFragment(messageId, this)
+                val gameResult = GameOverFragment(message, this, imageId)
 
                 val ft = activity.supportFragmentManager.beginTransaction()
                 ft.setReorderingAllowed(true)
@@ -330,15 +326,15 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
         )
     }
 
-    fun gameOver_win(){
+    private fun gameOver_win(){
         drawing = false
         gameOver = true
-        showGameOver(resources.getString(R.string.win))
+        showGameOver(resources.getString(R.string.win), R.drawable.tournesol_sprite)
     }
     fun gameOver_lose(){
         drawing = false
         gameOver = true
-        showGameOver(resources.getString(R.string.lose))
+        showGameOver(resources.getString(R.string.lose), R.drawable.lose_zomboss)
     }
 
 

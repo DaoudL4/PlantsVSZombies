@@ -4,17 +4,17 @@ import android.graphics.*
 import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
-class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) : Timer{
+class Soleil(private var credit: Credit, var x : Float, var y: Float, var rayon: Float) : Timer{
     override var periodeTimer = 5f
     override var t0Timer = 0L
 
-    var etat = true
-    val increment = 50
+    private var etat = true
+    private val increment = 50
 
-    var paintFond = Paint()
-    val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
-    var spriteActif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite)
-    var spriteInactif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite_desac)
+    private var paintFond = Paint()
+    private val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
+    private var spriteActif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite)
+    private var spriteInactif = BitmapFactory.decodeResource(App.instance.resources, R.drawable.sun_sprite_desac)
 
 
     fun onTouch(e : MotionEvent){
@@ -34,11 +34,11 @@ class Soleil(var credit: Credit, var x : Float, var y: Float, var rayon: Float) 
         }
     }
 
-    fun changeEtat(){
+    private fun changeEtat(){
         etat = !etat
     }
 
-    fun incrementer(){
+    private fun incrementer(){
         credit.updateCredit(increment)
     }
 

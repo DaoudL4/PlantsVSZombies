@@ -6,12 +6,11 @@ import android.graphics.RectF
 import androidx.core.graphics.toRect
 
 abstract class Plante(val case : Case, var rayon : Float) {
-    var posX = case.posX
-    var posY = case.posY
+    private var posX = case.posX
+    private var posY = case.posY
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     var mort = false
 
-    open val recharge = 100
     abstract var pv : Float
     abstract val sprite : Bitmap
 

@@ -3,17 +3,18 @@ package com.example.plantsvszombies
 import android.graphics.*
 import androidx.core.graphics.toRect
 
-class ShopElement(var shop : Shop, var x: Float, var y : Float, var plantelongueur : Float,
-                  var plantelargeur : Float, var nom : String, var cout : Int,override var periodeTimer: Float,
-                  var sprite : Bitmap, var sprite_inactif : Bitmap, var sprite_select : Bitmap) : Timer{
+class ShopElement(
+    private var shop : Shop, var x: Float, var y : Float, var plantelongueur : Float,
+    var plantelargeur : Float, var nom : String, private var cout : Int, override var periodeTimer: Float,
+    private var sprite : Bitmap, private var sprite_inactif : Bitmap, private var sprite_select : Bitmap) : Timer{
 
-    var r = RectF(x-plantelongueur/2,y-plantelargeur/2,x+plantelongueur/2,y+plantelargeur/2)
+    private var r = RectF(x-plantelongueur/2,y-plantelargeur/2,x+plantelongueur/2,y+plantelargeur/2)
     var actif = false
     var select = false
 
-    var progression = 0f
-    var rProgress = RectF(x-plantelongueur/2,y-plantelargeur/2,x+plantelongueur/2,y-(progression*plantelargeur)+plantelargeur/2)
-    var paintProgress = Paint()
+    private var progression = 0f
+    private var rProgress = RectF(x-plantelongueur/2,y-plantelargeur/2,x+plantelongueur/2,y-(progression*plantelargeur)+plantelargeur/2)
+    private var paintProgress = Paint()
 
     override var t0Timer = System.currentTimeMillis()
 

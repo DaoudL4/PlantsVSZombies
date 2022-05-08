@@ -6,12 +6,12 @@ import android.graphics.Paint
 import android.graphics.RectF
 
 class BarreProgression(var x : Float, var y : Float, var longueur : Float, var largeur : Float) {
-    var paintFond = Paint()
-    var paintBarre = Paint()
+    private var paintFond = Paint()
+    private var paintBarre = Paint()
     var progression = 0f
 
-    var rFond = RectF(x-longueur/2,y-largeur/2,x+longueur/2,y+largeur/2)
-    var rBarre = RectF(x-longueur/2,y-largeur/2,x+(progression*longueur),y+largeur/2)
+    private var rFond = RectF(x-longueur/2,y-largeur/2,x+longueur/2,y+largeur/2)
+    private var rBarre = RectF(x-longueur/2,y-largeur/2,x+(progression*longueur),y+largeur/2)
 
 
     fun draw(canvas: Canvas){

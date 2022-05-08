@@ -3,7 +3,7 @@ package com.example.plantsvszombies
 import android.graphics.BitmapFactory
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class Plante_verte(case: Case, rayon : Float, zombies: ArrayList<Zombie>, plantes : ConcurrentLinkedQueue<Plante>) : Plante_attaque(case, rayon, zombies, plantes) {
+class Plante_verte(case: Case, rayon : Float, view : GameView) : Plante_attaque(case, rayon, view) {
     override val sprite = BitmapFactory.decodeResource(
         App.instance.resources,
         R.drawable.sprite_verte

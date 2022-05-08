@@ -7,9 +7,9 @@ import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
 class Pelle(var x : Float, var y: Float, var rayon: Float) {
-    val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
-    var sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.pelle)
-    val sprite_click = BitmapFactory.decodeResource(App.instance.resources, R.drawable.pelle_clicked)
+    private val r = RectF(x-rayon, y-rayon,x+rayon, y+rayon)
+    private var sprite = BitmapFactory.decodeResource(App.instance.resources, R.drawable.pelle)
+    private val sprite_click = BitmapFactory.decodeResource(App.instance.resources, R.drawable.pelle_clicked)
     var destruction = false
 
     fun onTouch(e : MotionEvent){

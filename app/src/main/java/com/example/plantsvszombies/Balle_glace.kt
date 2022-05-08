@@ -8,7 +8,7 @@ class Balle_glace(indice: Int, planteAttaque: Plante_attaque, zombies: ArrayList
         App.instance.resources,
         R.drawable.balle_glace
     )
-    var gele = true
+    private var gele = true
 
     override fun quandToucheZombie() {
         super.quandToucheZombie()

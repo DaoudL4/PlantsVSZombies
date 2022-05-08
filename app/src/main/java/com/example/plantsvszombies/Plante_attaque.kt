@@ -3,14 +3,18 @@ package com.example.plantsvszombies
 import android.graphics.Canvas
 import java.util.concurrent.ConcurrentLinkedQueue
 
-abstract class Plante_attaque(case: Case, rayon : Float, val zombies: ArrayList<Zombie>, val plantes: ConcurrentLinkedQueue<Plante>) : Plante(case, rayon) {
-    val periode_tir = 1
-    var t0 = 0L
+abstract class Plante_attaque(case: Case, rayon : Float, val view: GameView) : Plante(case, rayon), Timer {
+    override var periodeTimer = 1f
+    override var t0Timer = 0L
     var balles = ConcurrentLinkedQueue<Balle>()
 
     open fun tir(){
-        balles.add(Balle(balles.size-1, this, zombies, plantes))
-        t0 = System.currentTimeMillis()
+        balles.add(Balle(balles.size-1, this, view.zombies, view.plantes))
+        resetTimer()
+    }
+
+    override fun actionTimer() {
+        tir()
     }
 
     fun avanceBalles(interval: Double){

@@ -3,8 +3,8 @@ package com.example.plantsvszombies
 import android.graphics.*
 import android.view.MotionEvent
 
-class Shop (var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
-    val r = RectF(x1, y1, x2, y2)
+class Shop (private var credit: Credit, var x1 : Float, var y1: Float, var x2: Float, var y2: Float) {
+    private val r = RectF(x1, y1, x2, y2)
 
     var plantex = 0f
     var plantelargeur = 0f

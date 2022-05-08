@@ -4,24 +4,21 @@ import android.graphics.*
 import androidx.core.graphics.toRect
 
 
-open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array<Case>>, val view: GameView) {
+open class Zombie(private var ligne: Int, var rayon : Float, var listeCase : Array<Array<Case>>, val view: GameView) {
     var case = listeCase[ligne][8]
-    var posX = case.posX
-    var posY = case.posY
-    var estGele = false
-    var vitesse = 0.03
+    private var posX = case.posX
+    private var posY = case.posY
+    private var estGele = false
+    private var vitesse = 0.03
     open var pv = 8
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
-    var avance = true
-    lateinit var caseAttaque : Case
+    private var avance = true
+    private lateinit var caseAttaque : Case
     open val degats = 1
     var mort = false
 
     open var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie)
-    open var sprite_gele = BitmapFactory.decodeResource(
-        App.instance.resources,
-        R.drawable.zombie_gel
-    )
+    open var sprite_gele = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_gel)
 
     fun draw(canvas : Canvas){
         if(!estGele) canvas.drawBitmap(sprite_normal, null, r.toRect(), null)
@@ -65,7 +62,7 @@ open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array
         r.set(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     }
 
-    fun currentCase(){
+    private fun currentCase(){
         for(i in listeCase[ligne]){
             if(i.case.contains(r.centerX(), r.centerY())){
                 if (i.occupe ){
@@ -88,7 +85,7 @@ open class Zombie(var ligne: Int, var rayon : Float, var listeCase : Array<Array
         }
     }
 
-    fun depasse() : Boolean{
+    private fun depasse() : Boolean{
         return (listeCase[ligne][0].case.contains(r.centerX(), r.centerY())
                 && r.centerX()<listeCase[ligne][0].posX)
     }

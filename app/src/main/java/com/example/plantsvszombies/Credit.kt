@@ -6,10 +6,9 @@ import android.graphics.Paint
 import android.graphics.RectF
 
 class Credit(var x : Float, var y: Float, var rayon: Float) {
-    var paint = Paint()
-    var textpaint = Paint()
-    var police = 0
-    val r = RectF(x-rayon, y-rayon/2,x+rayon, y+rayon/2)
+    private var paint = Paint()
+    private var textpaint = Paint()
+    private val r = RectF(x-rayon, y-rayon/2,x+rayon, y+rayon/2)
 
     var credit = 50
 

@@ -6,11 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 
-class GameOverFragment(var texte : String, var Gview : GameView) : Fragment() {
+class GameOverFragment(var texte : String, var Gview : GameView, var resImage : Int) : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +26,9 @@ class GameOverFragment(var texte : String, var Gview : GameView) : Fragment() {
         val view = inflater!!.inflate(R.layout.gameover_fragment_layout,container,false)
         val tv = view.findViewById<TextView>(R.id.textView)
         tv.text = texte
+
+        val iv = view.findViewById<ImageView>(R.id.imageView3)
+        iv.setImageResource(resImage)
 
         val buttonReset = view.findViewById<Button>(R.id.buttonreset)
         val buttonLevel = view.findViewById<Button>(R.id.buttonlevel)

@@ -5,8 +5,8 @@ import android.view.MotionEvent
 import androidx.core.graphics.toRect
 
 class Case(var posX : Float, var posY : Float, var largeur : Float, var longueur : Float, var view : GameView) {
-    val sprite1 = BitmapFactory.decodeResource(App.instance.resources, R.drawable.herbe1)
-    val sprite2 = BitmapFactory.decodeResource(App.instance.resources, R.drawable.herbe2)
+    private val sprite1 = BitmapFactory.decodeResource(App.instance.resources, R.drawable.herbe1)
+    private val sprite2 = BitmapFactory.decodeResource(App.instance.resources, R.drawable.herbe2)
 
     var occupe = false
     var pair = 0

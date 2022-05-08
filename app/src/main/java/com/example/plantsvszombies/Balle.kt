@@ -6,16 +6,16 @@ import android.graphics.RectF
 import androidx.core.graphics.toRect
 import java.util.concurrent.ConcurrentLinkedQueue
 
-open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombies: ArrayList<Zombie>, val plantes: ConcurrentLinkedQueue<Plante>) {
-    val case0 = planteAttaque.case
-    var posX = case0.posX
-    var posY = case0.posY
-    var rayon = 50f
+open class Balle(val indice : Int, private val planteAttaque: Plante_attaque, private val zombies: ArrayList<Zombie>, private val plantes: ConcurrentLinkedQueue<Plante>) {
+    private val case0 = planteAttaque.case
+    private var posX = case0.posX
+    private var posY = case0.posY
+    private var rayon = 50f
     open var sprite =  BitmapFactory.decodeResource(App.instance.resources, R.drawable.balle)
-    val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
+    private val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     lateinit var zombietouche: Zombie
-    val vitesse = 1
-    var degats = 1
+    private val vitesse = 1
+    private var degats = 1
     var disparait = false
 
     open fun launch(interval : Double) {
@@ -34,7 +34,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
         degats = 2
     }
 
-    fun toucheBuche(): Boolean {
+    private fun toucheBuche(): Boolean {
         var res = false
         for (p in plantes){
             if(p is Buche && p.r.contains(r.centerX(), r.centerY())){
@@ -50,7 +50,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
         destruction()
     }
 
-    fun toucheZombie() : Boolean{
+    private fun toucheZombie() : Boolean{
         var res = false
         for (z in zombies){
             if(r.contains(z.r.centerX(), z.r.centerY())){
@@ -61,7 +61,7 @@ open class Balle(val indice : Int, val planteAttaque: Plante_attaque, val zombie
         return res
     }
 
-    fun destruction(){
+    private fun destruction(){
         planteAttaque.delBalle(indice)
     }
 
