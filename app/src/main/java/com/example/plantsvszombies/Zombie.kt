@@ -10,7 +10,7 @@ open class Zombie(private var ligne: Int, var rayon : Float, var listeCase : Arr
     private var posY = case.posY
     private var estGele = false
     private var vitesse = 0.03
-    open var pv = 8
+    open var pv = 10
     val r = RectF(posX-rayon, posY-rayon,posX+rayon, posY+rayon)
     private var avance = true
     private lateinit var caseAttaque : Case
@@ -74,8 +74,6 @@ open class Zombie(private var ligne: Int, var rayon : Float, var listeCase : Arr
                     }catch (e : UninitializedPropertyAccessException){
                         caseAttaque = i
                         avance = false
-
-                        println("exception levee")
                     }
                 }
                 else{

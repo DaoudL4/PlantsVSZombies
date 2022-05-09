@@ -4,13 +4,13 @@ import android.graphics.BitmapFactory
 import kotlin.random.Random
 
 class Zombie_mage(ligne: Int, rayon : Float, listeCase : Array<Array<Case>>, view: GameView) : Zombie(ligne, rayon, listeCase, view), Timer {
-    override var pv = 5
+    override var pv = 15
     override val degats = 0
     override var sprite_normal = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_mage)
     override var sprite_gele = BitmapFactory.decodeResource(App.instance.resources, R.drawable.zombie_mage_gele)
 
     override var t0Timer = System.currentTimeMillis()
-    override var periodeTimer = 5f
+    override var periodeTimer = 10f
 
     private var listeCaseOccupe = ArrayList<Case>()
 

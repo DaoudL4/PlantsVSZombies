@@ -10,13 +10,14 @@ import android.view.SurfaceView
 import android.view.View
 import androidx.fragment.app.FragmentActivity
 import java.util.concurrent.ConcurrentLinkedQueue
+import kotlin.math.exp
+import kotlin.random.Random
 
 class GameView @JvmOverloads constructor (context: Context, attributes: AttributeSet? = null, defStyleAttr: Int = 0): SurfaceView(context, attributes,defStyleAttr), Runnable, SurfaceHolder.Callback {
     lateinit var canvas : Canvas
     private var drawing = false
     private lateinit var thread : Thread
 
-    var level = 0
     var cases : Array<Array<Case>>
     val ncaseY = 5
     val ncaseX = 9
@@ -35,13 +36,15 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     private var spawn = SpawnZombie(this)
 
     private var t0 = 0L
-    private val tempsPartie = 120
+    private val tempsPartie = 240
+    var arcade = false
 
     private var gameOver = false
     private val activity = context as FragmentActivity
 
     init {
         this.visibility = View.VISIBLE
+        val level = activity.intent.extras!!.getInt("level")
         spawn.level = level
         spawn.setLevel()
         cases = Array(ncaseY){Array(ncaseX){Case(0f, 0f, 0f, 0f, this)} }
@@ -94,7 +97,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             for (z in zombies) {
                 z.draw(canvas)
             }
-            barreProgression.draw(canvas)
+            if(!arcade) barreProgression.draw(canvas)
 
             holder.unlockCanvasAndPost(canvas)
         }
@@ -141,6 +144,14 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
     fun detruitPlante(case: Case) {
         plantes.removeAll{it.case == case}
         pelle.destruction = false
+    }
+
+    fun spawnZombie(n : Int){
+        when(n) {
+            1 -> zombies.add(Zombie(Random.nextInt(0,ncaseY), 100f, cases, this))
+            2 -> zombies.add(Zombie_cone(Random.nextInt(0,ncaseY), 100f, cases, this))
+            3 -> zombies.add(Zombie_mage(Random.nextInt(0,ncaseY), 100f, cases, this))
+        }
     }
 
     fun spawnMain(case : Case){
@@ -256,7 +267,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
 
             previousTime = currentTime
 
-            if(t >= tempsPartie*1000) gameOver_win()
+            if(t >= tempsPartie*1000 && !arcade) gameOver_win()
         }
     }
 

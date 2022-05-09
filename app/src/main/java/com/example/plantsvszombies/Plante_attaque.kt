@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import java.util.concurrent.ConcurrentLinkedQueue
 
 abstract class Plante_attaque(case: Case, rayon : Float, val view: GameView) : Plante(case, rayon), Timer {
-    override var periodeTimer = 1f
+    override var periodeTimer = 2f
     override var t0Timer = 0L
     var balles = ConcurrentLinkedQueue<Balle>()
 
@@ -23,7 +23,6 @@ abstract class Plante_attaque(case: Case, rayon : Float, val view: GameView) : P
             val b = iterator.next()
             b.launch(interval)
         }
-
     }
 
     fun delBalle(indice : Int) {

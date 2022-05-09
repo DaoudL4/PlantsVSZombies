@@ -14,7 +14,6 @@ class GameActivity(): AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         gameView = findViewById(R.id.gameView)
-        gameView.level = intent.extras!!.getInt("level")
         gameView.setZOrderOnTop(true)
         gameView.holder.setFormat(PixelFormat.TRANSPARENT)
 
