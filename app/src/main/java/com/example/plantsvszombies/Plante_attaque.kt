@@ -9,7 +9,7 @@ abstract class Plante_attaque(case: Case, rayon : Float, val view: GameView) : P
     var balles = ConcurrentLinkedQueue<Balle>()
 
     open fun tir(){
-        balles.add(Balle(balles.size-1, this, view.zombies, view.plantes))
+        balles.add(Balle(balles.size-1, this, view))
         resetTimer()
     }
 

@@ -11,7 +11,7 @@ class Plante_glace(case: Case, rayon : Float, view : GameView) : Plante_attaque(
     override var pv = 3000f
 
     override fun tir() {
-        balles.add(Balle_glace(balles.size-1, this, view.zombies, view.plantes))
+        balles.add(Balle_glace(balles.size-1, this, view))
         resetTimer()
     }
 }

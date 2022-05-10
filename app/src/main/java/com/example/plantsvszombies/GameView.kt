@@ -98,6 +98,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
                 z.draw(canvas)
             }
             if(!arcade) barreProgression.draw(canvas)
+            else barreProgression.drawTime(canvas)
 
             holder.unlockCanvasAndPost(canvas)
         }
@@ -246,6 +247,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             spawn.setPeriode(t)
             spawn.timer(currentTime)
 
+
             for (z in zombies) {
                 z.avance(interval)
                 if(z is Zombie_mage) z.timer(currentTime)
@@ -263,6 +265,7 @@ class GameView @JvmOverloads constructor (context: Context, attributes: Attribut
             }
 
             barreProgression.progression = (t/(1000*tempsPartie)).toFloat()
+            barreProgression.t = (t/1000).toFloat()
             barreProgression.set()
 
             previousTime = currentTime

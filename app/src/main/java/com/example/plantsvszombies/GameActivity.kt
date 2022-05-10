@@ -2,6 +2,8 @@ package com.example.plantsvszombies
 
 import android.graphics.PixelFormat
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 
@@ -13,6 +15,7 @@ class GameActivity(): AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         gameView = findViewById(R.id.gameView)
         gameView.setZOrderOnTop(true)
         gameView.holder.setFormat(PixelFormat.TRANSPARENT)

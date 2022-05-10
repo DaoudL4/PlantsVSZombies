@@ -45,7 +45,7 @@ class SpawnZombie(private val view : GameView) : Timer{
                 view.arcade = true
                 a = 1
                 b = 30
-                c = 30
+                c = 120
             }
         }
     }
